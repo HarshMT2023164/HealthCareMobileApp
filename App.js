@@ -6,19 +6,23 @@ import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navig
 import Home from './components/Home';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Icon, IconButton } from 'react-native-paper';
+import DoctorListScreen from './components/DoctorListScreen';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <Tab.Navigator initialRouteName='Home' activeColor='#37474F' inactiveColor='#A7CAE7' activeIndicatorStyle={{backgroundColor:'#BBDEFB',}} barStyle={{backgroundColor:'white'}} labeled={false}>
-          <Tab.Screen name='Home' component={Home} options={{tabBarIcon:({color})=>(<Icon source='home' size={25} color={color}/>),}}/>
-          <Tab.Screen name='Notifications' component={Home} options={{tabBarIcon:({color})=>(<Icon source='bell' size={25} color={color}/>),}}/>
-          <Tab.Screen name='Profile' component={Home} options={{tabBarIcon:({color})=>(<Icon source='account-circle' size={25} color={color}/>),}}/>
-        </Tab.Navigator>
-    </NavigationContainer>
+      <GestureHandlerRootView>
+        <NavigationContainer>
+          <Tab.Navigator initialRouteName='Home' activeColor='#37474F' inactiveColor='#A7CAE7' activeIndicatorStyle={{backgroundColor:'#BBDEFB',}} barStyle={{backgroundColor:'white'}} labeled={false}>
+            <Tab.Screen name='Home' component={Home} options={{tabBarIcon:({color})=>(<Icon source='home' size={25} color={color}/>),}}/>
+            <Tab.Screen name='Notifications' component={DoctorListScreen} options={{tabBarIcon:({color})=>(<Icon source='bell' size={25} color={color}/>),}}/>
+            <Tab.Screen name='Profile' component={Home} options={{tabBarIcon:({color})=>(<Icon source='account-circle' size={25} color={color}/>),}}/>
+          </Tab.Navigator>
+        </NavigationContainer>
+     </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }

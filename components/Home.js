@@ -16,7 +16,7 @@ const Home = () => {
 
     const formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-
+    ////Dyamic
     return (
         <View style={styles.HomePage}>
             <Appbar.Header style={styles.appbarContainer}>
@@ -35,19 +35,19 @@ const Home = () => {
                         <Picker.Item label="Option 3" value="option3" />
                     </Picker>
                 </View>
-            </Appbar.Header>
-            <View style={styles.dateTimeContainer}>
+                <View style={styles.dateTimeContainer}>
                 <Surface style={styles.dateTimeBox}>
                     <Text>{currentDate.toDateString()}</Text>
                     <Text>|</Text>
                     <Text>{formattedTime}</Text>
                 </Surface>
-            </View>
-            <View style={styles.StatusContainer}>
+                </View>
+            </Appbar.Header>
+            {/* <View style={styles.StatusContainer}>
             <Surface style={styles.StatusItem} elevation={1}>
                 <Text style={styles.StatusItemText}>Online</Text>
             </Surface>
-            </View>
+            </View> */}
             <View style={styles.MainContent}>
                 <Card elevation={3} style={styles.MainContentCard}>
                     <Card.Title title="Register People" right={()=>(<Image resizeMode="center" style={styles.MainContentCardImg} source={require('../assets/images/registerPeople.png')}/>)}/>
@@ -60,6 +60,51 @@ const Home = () => {
             </View>
         </View>
     );
+    
+    ////Static
+    // return (
+    //     <View style={styles.HomePage}>
+    //         <Appbar.Header style={styles.appbarContainer}>
+    //             <Surface style={styles.appbarItem1}>
+    //                 <Text style={styles.appbarItemText}>Tanvi Motwani</Text>
+    //             </Surface>
+    //             <View style={styles.appbarItem2}>
+    //                 <Picker
+    //                     mode="dropdown"
+    //                     selectedValue={selectedValue}
+    //                     onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+    //                     style={styles.appbarDropdown}
+    //                 >
+    //                     <Picker.Item label="Option 1" value="option1" />
+    //                     <Picker.Item label="Option 2" value="option2" />
+    //                     <Picker.Item label="Option 3" value="option3" />
+    //                 </Picker>
+    //             </View>
+    //         </Appbar.Header>
+    //         <View style={styles.dateTimeContainer}>
+    //             <Surface style={styles.dateTimeBox}>
+    //                 <Text>{currentDate.toDateString()}</Text>
+    //                 <Text>|</Text>
+    //                 <Text>{formattedTime}</Text>
+    //             </Surface>
+    //         </View>
+    //         {/* <View style={styles.StatusContainer}>
+    //         <Surface style={styles.StatusItem} elevation={1}>
+    //             <Text style={styles.StatusItemText}>Online</Text>
+    //         </Surface>
+    //         </View> */}
+    //         <View style={styles.MainContent}>
+    //             <Card elevation={3} style={styles.MainContentCard}>
+    //                 <Card.Title title="Register People" right={()=>(<Image resizeMode="center" style={styles.MainContentCardImg} source={require('../assets/images/registerPeople.png')}/>)}/>
+    //                 <Card.Actions style={styles.MainContentCardAction}><Button icon='chevron-right' onPress={()=>console.log("Choice: Register People")} contentStyle={{flexDirection:'row-reverse'}} mode='contained' dark={false} style={styles.MainContentCardActionButton}>Continue</Button></Card.Actions>
+    //             </Card>
+    //             <Card elevation={3} style={styles.MainContentCard}>
+    //                 <Card.Title title="Follow Up" right={()=>(<Image resizeMode="center" style={styles.MainContentCardImg} source={require('../assets/images/followUp.png')}/>)}/>
+    //                 <Card.Actions style={styles.MainContentCardAction}><Button mode='contained' dark={false} onPress={()=>console.log("Choice: Follow Ups")} icon='chevron-right' contentStyle={{flexDirection:'row-reverse'}} style={styles.MainContentCardActionButton}>Continue</Button></Card.Actions>
+    //             </Card>
+    //         </View>
+    //     </View>
+    // );
 }
 
 const styles = StyleSheet.create({
@@ -158,7 +203,7 @@ const styles = StyleSheet.create({
     },
     MainContentCardImg:
     {
-        width:200,
+        width:150,
         height:150,
         marginTop:20,
     },
