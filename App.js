@@ -1,35 +1,46 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
+import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import WelcomeScreen from './components/WelcomeScreen';
+import Login from './components/login';
+import TabNavigation from './components/TabNavigation';
+import Registration from './components/Registration';
+import Questionnaire from './components/Questionnaire';
+import { MD3LightTheme as DefaultTheme,PaperProvider } from 'react-native-paper';
+import { StyleSheet,View } from 'react-native';
+import HealthCard2 from './components/HealthCard2';
+import DoctorListScreen from './components/DoctorListScreen'
 
-import Home from './components/Home';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Icon, IconButton } from 'react-native-paper';
-import DoctorListScreen from './components/DoctorListScreen';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
-const Tab = createMaterialBottomTabNavigator();
 
 export default function App() {
+
+  const Stack = createStackNavigator();
+
   return (
-    <SafeAreaProvider>
-      <GestureHandlerRootView>
-        <NavigationContainer>
-          <Tab.Navigator initialRouteName='Home' activeColor='#37474F' inactiveColor='#A7CAE7' activeIndicatorStyle={{backgroundColor:'#BBDEFB',}} barStyle={{backgroundColor:'white'}} labeled={false}>
-            <Tab.Screen name='Home' component={Home} options={{tabBarIcon:({color})=>(<Icon source='home' size={25} color={color}/>),}}/>
-            <Tab.Screen name='Notifications' component={DoctorListScreen} options={{tabBarIcon:({color})=>(<Icon source='bell' size={25} color={color}/>),}}/>
-            <Tab.Screen name='Profile' component={Home} options={{tabBarIcon:({color})=>(<Icon source='account-circle' size={25} color={color}/>),}}/>
-          </Tab.Navigator>
-        </NavigationContainer>
-     </GestureHandlerRootView>
-    </SafeAreaProvider>
+    <PaperProvider>
+      <View style={styles.container}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="ZENCARE">
+          <Stack.Screen name='ZENCARE' component={WelcomeScreen}options={{ headerShown:false}}/>
+          <Stack.Screen name="LoginScreen" component={Login} options={{title:''}}/>
+          <Stack.Screen name="TabNavigation" component={TabNavigation} options={{headerShown:false}}/>
+          <Stack.Screen name="register" component={Registration} options={{headerShown:false}}/>
+          <Stack.Screen name="question" component={Questionnaire} options={{headerShown:false}}/>
+          <Stack.Screen name="healthCard" component={HealthCard2} options={{headerShown:false}}/>
+          <Stack.Screen name="doctorList" component={DoctorListScreen} options={{headerShown:false}}/>
+        </Stack.Navigator>
+      </NavigationContainer>
+      </View>
+    </PaperProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-});
+
+const styles = StyleSheet.create(
+  {
+    container:
+    {
+      flex:1,
+    }
+  }
+)
