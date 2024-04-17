@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Alert } from "react-native";
+import { StyleSheet, View, Alert ,Text} from "react-native";
 import {
   TextInput,
   Button,
@@ -11,6 +11,8 @@ import { useNavigation } from "@react-navigation/native";
 import SQLite from "react-native-sqlite-storage";
 import { insertFormData } from "../common/Database";
 import { syncDataWithBackend } from "../utils/dataSyncService";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const RegistrationForm = () => {
   const navigation = useNavigation();
@@ -75,7 +77,7 @@ const RegistrationForm = () => {
     await syncDataWithBackend();
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async() => {
     // navigation.push('question');
     const requiredFields = [
       "name",
@@ -97,7 +99,7 @@ const RegistrationForm = () => {
       });
       setErrorFields(newErrorFields);
 
-      Alert.alert("Error", `Please fill out all required fields`);
+      Alert.alert("Error", "Please fill out all required fields");
       return;
     }
 
@@ -133,6 +135,12 @@ const RegistrationForm = () => {
     });
 
     // Navigate to the next screen or perform other actions
+        const temp ={
+            name:form.name,
+            gender:form.gender,
+            age:form.age,
+          }
+    const res = await AsyncStorage.setItem('userObject', JSON.stringify(temp));
     navigation.push("question");
   };
 
@@ -272,7 +280,7 @@ const RegistrationForm = () => {
           onPress={() => clearForm()}
           style={styles.button}
         >
-          Clear Form
+          <Text style={{fontSize:12}}>Clear form</Text>
         </Button>
         <Button
           mode="contained"
@@ -297,7 +305,7 @@ const styles = StyleSheet.create({
     width: "33%",
     marginTop: 20,
     height : "70%",
-    backgroundColor : "#354c7c"
+    backgroundColor : "#7aa8d2"
   },
   btnCont: {
     display: "flex",

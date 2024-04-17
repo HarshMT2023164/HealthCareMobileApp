@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { RadioButton, Text, Button, Card } from "react-native-paper";
 import { BASE_URL, Fetch_Questionnarie } from "../common/urls";
-
+import {useNavigation} from '@react-navigation/native'
 const QuestionForm = () => {
   const [answers, setAnswers] = useState({});
   const [questionList, setQuestionList] = useState([]);
-
+  const navigation = useNavigation();
   const data = {
     id: 1,
     name: "registeration",
@@ -300,6 +300,7 @@ const QuestionForm = () => {
   const handleSubmit = () => {
     // Handle submission logic (e.g., send answers to server, navigate to result screen)
     console.log("Submitted answers:", answers);
+    navigation.navigate('healthCard');
     // You can add your logic here to process the answers
   };
 
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginTop: 16,
-    backgroundColor : "#354c7c"
+    backgroundColor : '#7aa8d2'
   },
 });
 

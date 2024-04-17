@@ -3,14 +3,16 @@ import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, useTheme } from "react-native-paper";
 import RegistrationForm from "./RegistrationForm";
+import { useNavigation } from "@react-navigation/core";
 
 
 const Registration = () => {
   const theme = useTheme();
+  const navigation = useNavigation();
   return (
     <View style={styles.contaier}>
       <View style={styles.heading}>
-        <Ionicons name="arrow-back" size={24} color={"white"} />
+        <Ionicons name="arrow-back" size={24} color={"white"} onPress={()=>navigation.goBack()}/>
         <View style={styles.subHeadCont}>
         <FontAwesome style={{padding : 10 , backgroundColor: "white", borderRadius : 100 }} name="wpforms" size={24}  color={"black"}/>
         <Text style={styles.headingText}>Register Patient</Text>
@@ -36,10 +38,10 @@ const styles = StyleSheet.create({
     flexDirection : "row",
     gap : 20,
     alignItems : "center",
-    backgroundColor : "#354c7c",
     padding : 20,
     borderRadius : 5,
     color : "white",
+    backgroundColor:'#7aa8d2'
     
   },
   subHeadCont : {
@@ -51,7 +53,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: 24,
-    color : 'white'
+    color : 'white',
   },
 });
 
