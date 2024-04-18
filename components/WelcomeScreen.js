@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
-import LottieView from 'lottie-react-native'; // Importing LottieView
+import LottieView from 'lottie-react-native';
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, Card } from 'react-native-paper';
+
 const WelcomeScreen = () => {
     const navigation = useNavigation();
     const windowHeight = useWindowDimensions().height;
@@ -15,17 +16,18 @@ const WelcomeScreen = () => {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
-            <LottieView
-                        source={require('../assets/animated.json')} // Path to your animation JSON file
-                        autoPlay
-                        loop
-                         style={[styles.imageBackground, { height: windowHeight,width:windowWidth }]}
-                    />
-                
+                <LottieView
+                    source={require('../assets/animated.json')}
+                    autoPlay
+                    loop
+                    style={[styles.lottieAnimation, { height: windowHeight * 0.6, width: windowWidth }]}
+                />
                 <View style={styles.contentContainer}>
-                    <Text variant="displayMedium"style={styles.title}>FIELD HEALTHCARE WORKER</Text>
+                    <Card style={styles.card}>
+                        <Text style={styles.title}>ZENCARE</Text>
+                    </Card>
                     <Button 
-                        mode="contained-tonal" 
+                        mode="contained" 
                         onPress={handleLoginPress} 
                         style={styles.loginButton}
                         labelStyle={styles.buttonText}
@@ -47,10 +49,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
     },
-    imageBackground: {
-        bottom:100,
-        width: '100%',
-    },
     contentContainer: {
         position: 'absolute',
         bottom: 0,
@@ -58,24 +56,33 @@ const styles = StyleSheet.create({
         paddingBottom: 70,
         alignItems: 'center',
     },
+    card: {
+        marginBottom: 20,
+        width:200,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: '#ffffff',
+        elevation: 5,
+        borderRadius: 10,
+    },
     title: {
         fontSize: 24,
-        bottom:40,
-        paddingHorizontal:40,
         textAlign: 'center',
     },
     loginButton: {
         width: '80%',
-        backgroundColor:'#e1f5fe',
-        borderColor:'black',
-        borderWidth:1,
+        backgroundColor: '#2196F3',
+        borderRadius: 30,
+        elevation: 3,
     },
     buttonText: {
-        fontSize: 19,
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#ffffff',
     },
     lottieAnimation: {
-        width: 200, // Adjust width as needed
-        height: 200, // Adjust height as needed
+        width: '100%',
+        marginBottom: 80,
     },
 });
 

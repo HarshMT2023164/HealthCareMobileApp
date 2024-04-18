@@ -1,8 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LottieView from 'lottie-react-native';
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { Button, Card, TextInput, Title } from 'react-native-paper';
 const Login = () => {
+  const windowHeight = useWindowDimensions().height;
+    const windowWidth= useWindowDimensions().width;
+
   const [user, setUser] = useState({
     username: '',
     password: '',
@@ -57,12 +61,18 @@ const Login = () => {
   return (
     
     <View style={styles.container}>
-      
+       <LottieView
+                        source={require('../assets/login_animated2.json')} // Path to your animation JSON file
+                        autoPlay
+                        loop
+                         style={[styles.imageBackground, { height: windowHeight/4,width:windowWidth }]}
+                    />
       <Card mode='elevated' style={styles.card}>
         {/* <Card.Actions>
           <Button icon ={()=> <Image source={require('../assets/Healthcare_Worker.jpg')}  />}/>
         </Card.Actions> */}
-     <Image source={require('../assets/Healthcare_Worker.jpg')} style={styles.logo} />
+        
+     {/* <Image source={require('../assets/Healthcare_Worker.jpg')} style={styles.logo} /> */}
         <Card.Content style={styles.cardContent}>
           <Title style={styles.title}>Login</Title>
 
@@ -111,6 +121,10 @@ const Login = () => {
 };
 
 const styles = StyleSheet.create({
+  imageBackground: {
+    bottom:5,
+    width: '100%',
+},
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -131,6 +145,7 @@ const styles = StyleSheet.create({
     // marginBottom:50
   },
   cardContent: {
+    marginTop:60,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
     padding: 20,
@@ -138,7 +153,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     marginBottom:10,
-    marginTop:-16,
+    marginTop:-66,
     fontSize: 24, // Adjust the font size
     fontWeight: 'bold', // Apply bold font weight
     color: '#333', // Adjust title color
@@ -156,7 +171,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: '#5a8de9', // Light blue color
     borderRadius: 20,
-    marginBottom:50
+    marginBottom:0
   },
   buttonText: {
     color: 'white',
