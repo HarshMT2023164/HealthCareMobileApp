@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
+import LottieView from 'lottie-react-native'; // Importing LottieView
 import React from 'react';
-import { ImageBackground, SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
-import { Button } from 'react-native-paper'; // Importing Button component from React Native Paper
+import { SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { Button } from 'react-native-paper';
 const WelcomeScreen = () => {
     const navigation = useNavigation();
     const windowHeight = useWindowDimensions().height;
+    const windowWidth= useWindowDimensions().width;
 
     const handleLoginPress = () => {
         navigation.navigate('LoginScreen');
@@ -13,11 +15,13 @@ const WelcomeScreen = () => {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
-                <ImageBackground
-                    style={[styles.imageBackground, { height: windowHeight / 2.5 }]}
-                    resizeMode="cover"
-                    source={require('../assets/Healthcare_Worker.jpg')}
-                />
+            <LottieView
+                        source={require('../assets/animated.json')} // Path to your animation JSON file
+                        autoPlay
+                        loop
+                         style={[styles.imageBackground, { height: windowHeight,width:windowWidth }]}
+                    />
+                
                 <View style={styles.contentContainer}>
                     <Text variant="displayMedium"style={styles.title}>FIELD HEALTHCARE WORKER</Text>
                     <Button 
@@ -65,11 +69,13 @@ const styles = StyleSheet.create({
         backgroundColor:'#e1f5fe',
         borderColor:'black',
         borderWidth:1,
-       
     },
     buttonText: {
         fontSize: 19,
-
+    },
+    lottieAnimation: {
+        width: 200, // Adjust width as needed
+        height: 200, // Adjust height as needed
     },
 });
 
