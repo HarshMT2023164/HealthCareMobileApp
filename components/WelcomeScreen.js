@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
-import { Button, Card } from 'react-native-paper';
+import { Image, SafeAreaView, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { Button } from 'react-native-paper';
 
 const WelcomeScreen = () => {
     const navigation = useNavigation();
@@ -23,9 +23,10 @@ const WelcomeScreen = () => {
                     style={[styles.lottieAnimation, { height: windowHeight * 0.6, width: windowWidth }]}
                 />
                 <View style={styles.contentContainer}>
-                    <Card style={styles.card}>
+                  <Image source={require('../assets/logo.png')} style={styles.logo} />
+                    {/* <Card style={styles.card}>
                         <Text style={styles.title}>ZENCARE</Text>
-                    </Card>
+                    </Card> */}
                     <Button 
                         mode="contained" 
                         onPress={handleLoginPress} 
@@ -41,6 +42,14 @@ const WelcomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    logo: {
+        width: 150,
+        height: 150,
+        alignSelf: 'center',
+        marginTop:40,
+        marginBottom: 20,
+        borderRadius: 75,// half of width and height to make it circular
+        },
     safeArea: {
         flex: 1,
         backgroundColor:'#f5f5f5',
