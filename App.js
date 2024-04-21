@@ -1,19 +1,137 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { PaperProvider } from 'react-native-paper';
+import { TableNames } from './common/Constants/DBConstants';
+import { BASE_URL, FETCH_DOCTORLIST, FETCH_QUESTIONNAIRE } from './common/Constants/URLs';
+import { deleteAllDataFromTable, insertDoctorToDb, insertQuestionnaireData, setupDatabase } from './common/Database';
+import DoctorListScreen from './components/DoctorListScreen';
+import HealthCard2 from './components/HealthCard2';
+import Questionnaire from './components/Questionnaire';
+import Registration from './components/Registration';
+import TabNavigation from './components/TabNavigation';
 import WelcomeScreen from './components/WelcomeScreen';
 import Login from './components/login';
-import TabNavigation from './components/TabNavigation';
-import Registration from './components/Registration';
-import Questionnaire from './components/Questionnaire';
-import { MD3LightTheme as DefaultTheme,PaperProvider } from 'react-native-paper';
-import { StyleSheet,View } from 'react-native';
-import HealthCard2 from './components/HealthCard2';
-import DoctorListScreen from './components/DoctorListScreen'
-
 
 export default function App() {
 
+  const fetchDoctorsList  = async() => {
+     try {
+        
+        const response = await axios.get(`${BASE_URL+FETCH_DOCTORLIST}?username=${"FHW41545"}`, {
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
+        });
+        console.log(response.data);
+
+        deleteAllDataFromTable(TableNames.DoctorListTable).then((rowsAffected) => {
+          if (rowsAffected > 0) {
+            console.log('All form data deleted successfully');
+            // Additional logic after successful deletion
+          } else {
+            console.log('No form data found to delete');
+          }
+
+          response?.data.forEach((doctor) => {
+            // console.log(doctor);
+            insertDoctorToDb(doctor)
+              .then(() => {
+                console.log("doctor id: ", doctor);
+                console.log(`Doctor '${doctor?.name}' inserted successfully`);
+                // Additional logic after successful insertion (if needed)
+              })
+              .catch((error) => {
+                console.error(`Error inserting doctor '${doctor.name}':`, error);
+              });
+          });
+
+        })
+        .catch((error) => {
+          console.error('Error deleting form data:', error);
+        });  
+
+ 
+       
+      } catch (error) {
+        console.log( "ERROR OF THEN 2:", error);
+        // setLoading(true); // Set loading to false if there's an error
+      }
+  }
+
+  const fetchQuestionnaire = async() => {
+      try {
+        
+        const response = await axios.get(`${BASE_URL+FETCH_QUESTIONNAIRE}?id=${2}`, {
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
+        });
+        console.log(response.data);
+        deleteAllDataFromTable(TableNames.QuestionnaireTable).then((rowsAffected) => {
+          if (rowsAffected > 0) {
+            console.log('All questionary data deleted successfully');
+            // Additional logic after successful deletion
+          } else {
+            console.log('No form data found to delete');
+          }
+          insertQuestionnaireData(response.data).then(() => {
+            
+            console.log(`Questionnaire data  inserted successfully`);
+            // Additional logic after successful insertion (if needed)
+          })
+          .catch((error) => {
+            console.error(`Error inserting doctor '${doctor.name}':`, error);
+          });
+        })
+        .catch((error) => {
+          console.error('Error deleting form data:', error);
+        });  
+
+        
+      } catch (error) {
+        console.log(error);
+        // setLoading(true); // Set loading to false if there's an error
+      }
+  }
+
+  const fetchOnAppLoad = () => {
+    
+    fetchDoctorsList();
+    fetchQuestionnaire();
+  } 
+
+  const [isConnected , setIsConnected]  = useState("Not connected");
+
+  // useEffect(() => {
+  //   const unsubscribeNetInfo = NetInfo.addEventListener(state => {
+  //     if (state.isConnected) {
+  //       // Network connection is available, trigger data sync
+  //       console.log("isconnected");
+  //       syncDataWithBackend();
+  //       setIsConnected("it is connected") // Call your sync function here
+  //     }
+  //     else{
+  //       console.log("is not connected");
+  //       setIsConnected("disconnected");
+  //     }
+  //   });
+
+  //   return () => {
+  //     // Unsubscribe from network state changes when component unmounts
+  //     unsubscribeNetInfo();
+  //   };
+  // },[]);
+
+  useEffect(() => {
+    console.log("hello");
+    setupDatabase();
+    fetchOnAppLoad();
+
+     // Initialize SQLite database
+  }, []);
   const Stack = createStackNavigator();
 
   return (
@@ -32,6 +150,7 @@ export default function App() {
       </NavigationContainer>
       </View>
     </PaperProvider>
+    
   );
 }
 
