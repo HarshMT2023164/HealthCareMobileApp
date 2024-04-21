@@ -12,7 +12,11 @@ import HealthCard2 from './components/HealthCard2';
 import Questionnaire from './components/Questionnaire';
 import Registration from './components/Registration';
 import TabNavigation from './components/TabNavigation';
+
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import WelcomeScreen from './components/WelcomeScreen';
+
+import * as LocalAuthentication from 'expo-local-authentication';
 import Login from './components/login';
 
 export default function App() {
@@ -132,6 +136,15 @@ export default function App() {
 
      // Initialize SQLite database
   }, []);
+
+  useEffect(()=> {
+    async function authenticate(){
+      const result =await LocalAuthentication.authenticateAsync();
+      console.log(result);
+    }
+    authenticate();
+  },[]);
+
   const Stack = createStackNavigator();
 
   return (
@@ -139,7 +152,13 @@ export default function App() {
       <View style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="ZENCARE">
-          <Stack.Screen name='ZENCARE' component={WelcomeScreen}options={{ headerShown:false}}/>
+        <Stack.Screen
+          name='ZENCARE'
+          component={WelcomeScreen}
+          options={{
+            headerShown:false, // Set a custom title
+          }}
+        />
           <Stack.Screen name="LoginScreen" component={Login} options={{title:''}}/>
           <Stack.Screen name="TabNavigation" component={TabNavigation} options={{headerShown:false}}/>
           <Stack.Screen name="register" component={Registration} options={{headerShown:false}}/>
@@ -151,8 +170,24 @@ export default function App() {
       </View>
     </PaperProvider>
     
-  );
-}
+
+  // return (
+  //   <GestureHandlerRootView>
+  //   <NavigationContainer>
+  //     <Stack.Navigator initialRouteName="ZENCARE">
+  //       <Stack.Screen
+  //         name='ZENCARE'
+  //         component={WelcomeScreen}
+  //         options={{
+  //           headerShown:false, // Set a custom title
+  //         }}
+  //       />
+  //       <Stack.Screen name="LoginScreen" component={Login} options={{title:''}}/>
+  //     </Stack.Navigator>
+  //   </NavigationContainer>
+  //   </GestureHandlerRootView>
+  // );
+)};
 
 const styles = StyleSheet.create({
   container: {
