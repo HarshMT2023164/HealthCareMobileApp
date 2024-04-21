@@ -1,17 +1,17 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Alert ,Text} from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import {
-  TextInput,
   Button,
-  Menu,
   HelperText,
+  Menu,
+  TextInput,
   useTheme,
 } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
-import SQLite from "react-native-sqlite-storage";
 import { insertFormData } from "../common/Database";
 import { syncDataWithBackend } from "../utils/dataSyncService";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storeInAsyncStorage } from "../utils/AsyncStorageService";
+
 
 
 const RegistrationForm = () => {
@@ -71,14 +71,17 @@ const RegistrationForm = () => {
     });
   };
 
+    useEffect(() => {
+    },[])
 
   const handleSync = async () => {
-    return;
     await syncDataWithBackend();
   };
 
   const handleFormSubmit = async() => {
-    // navigation.push('question');
+    navigation.push("question");
+    return ;
+
     const requiredFields = [
       "name",
       "age",
@@ -108,7 +111,13 @@ const RegistrationForm = () => {
       return;
     }
 
-    // insertFormData(form);
+    insertFormData(form).then(() => {
+      storeInAsyncStorage("abhaId", form.abhaId);
+      console.log("Register data submitted successfully");
+    })
+    .catch(() => {
+      console.log("Error in adding register data to db");
+    });
     console.log("Form submitted!");
     console.log(form);
 
@@ -134,14 +143,8 @@ const RegistrationForm = () => {
       abhaId: false,
     });
 
-    // Navigate to the next screen or perform other actions
-        const temp ={
-            name:form.name,
-            gender:form.gender,
-            age:form.age,
-          }
-    const res = await AsyncStorage.setItem('userObject', JSON.stringify(temp));
     navigation.push("question");
+    
   };
 
   return (
