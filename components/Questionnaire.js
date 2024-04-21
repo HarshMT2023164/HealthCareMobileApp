@@ -1,20 +1,14 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import React, { useEffect } from 'react'
-import { FontAwesome6,Ionicons } from '@expo/vector-icons';
-import QuestionForm from './QuestionForm';
-import { Button } from 'react-native-paper';
+import { FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native'
-import { fetchAllFormData } from '../common/Database';
-import { syncDataWithBackend } from '../utils/dataSyncService';
-import { BASE_URL, Fetch_Questionnarie } from '../common/urls';
-import axios from 'axios';
+import QuestionForm from './QuestionForm';
 const Questionnaire = () => {
   const navigation = useNavigation();
   const onBackPress = () => {
     navigation.goBack();
   }
-
 
 
 
