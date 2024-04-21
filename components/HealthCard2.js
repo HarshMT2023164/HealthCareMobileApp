@@ -1,12 +1,12 @@
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { Button, Card, Icon, Surface, Text } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from "@react-navigation/native";
+import { fetchDoctorsFromDb } from '../common/Database';
 
 const HealthCard2 = () => {
-
+  const {score} = useRoute().params;
   const navigation = useNavigation();
 
   const [user,setUser] = useState({
@@ -14,6 +14,22 @@ const HealthCard2 = () => {
     age:'',
     gender:'',
   });
+
+  const fetchDoctors = async() => {
+    console.log("called f");
+    try {
+      const fetchedDoctors = await fetchDoctorsFromDb();
+      console.log("fetched Doctors from doctor screen" , fetchedDoctors);
+    } catch (error) {
+      console.error('Error fetching doctors:', error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchDoctors();
+  })
+
   
   const handleContinue = ()=>{
     navigation.navigate('doctorList');
@@ -53,9 +69,9 @@ const HealthCard2 = () => {
       {/* <Text style={styles.title}>Health Score</Text> */}
       <CircularProgress
        title='Health Score'
-       maxValue={30}
+       maxValue={100}
        titleFontSize={16}
-        value={22}
+        value={score}
         radius={100}
         inActiveStrokeOpacity={0.5}
         activeStrokeWidth={15}
