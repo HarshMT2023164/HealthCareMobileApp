@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 export const storeInAsyncStorage = async (key, value) => {
     try {
       const jsonValue = JSON.stringify(value);
@@ -21,3 +22,10 @@ export const getFromAsyncStorage = async (key) => {
         return null;
       }
 }  
+
+export const Askeys = {
+  TOKEN : "token",
+  FHW_USERNAME : "FHWUsername",
+  SCORE : "score",
+  REGISTER_USER : "registerUserInfo"
+}
