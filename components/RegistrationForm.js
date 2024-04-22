@@ -10,7 +10,7 @@ import {
 } from "react-native-paper";
 import { insertFormData } from "../common/Database";
 import { syncDataWithBackend } from "../utils/dataSyncService";
-import { storeInAsyncStorage } from "../utils/AsyncStorageService";
+import { Askeys, storeInAsyncStorage } from "../utils/AsyncStorageService";
 
 
 
@@ -79,9 +79,6 @@ const RegistrationForm = () => {
   };
 
   const handleFormSubmit = async() => {
-    navigation.push("question");
-    return ;
-
     const requiredFields = [
       "name",
       "age",
@@ -113,6 +110,8 @@ const RegistrationForm = () => {
 
     insertFormData(form).then(() => {
       storeInAsyncStorage("abhaId", form.abhaId);
+      storeInAsyncStorage(Askeys.REGISTER_USER, {name : form.name , gender : form.gender , age : form.age});
+      
       console.log("Register data submitted successfully");
     })
     .catch(() => {

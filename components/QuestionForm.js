@@ -5,13 +5,14 @@ import { Button, Card, RadioButton, Text } from "react-native-paper";
 import { deleteAllDataFromTable, fetchDoctorAssignmentsFromDb, fetchDoctorsFromDb, fetchQuestionnaireFromDb, fetchResponsesFromDb, insertDoctorToDb, insertResponse, insertResponseToDb } from "../common/Database";
 
 import { TableNames } from '../common/Constants/DBConstants';
-import { getFromAsyncStorage } from '../utils/AsyncStorageService';
+import { Askeys, getFromAsyncStorage, storeInAsyncStorage } from '../utils/AsyncStorageService';
 const QuestionForm = () => {
   const [answers, setAnswers] = useState({});
   const [answerIds, setAnswerIds] = useState({});
   const [questionList, setQuestionList] = useState([]);
   const navigation = useNavigation();
   const [score , setScore] = useState({});
+ 
   const data = {
     "id": 2,
     "name": "Mental Health Condition Assessment",
@@ -188,6 +189,7 @@ const QuestionForm = () => {
       if (data && data.length > 0 && Array.isArray(data[0]?.questions)) {
         console.log("before setting data  :" , data[0].questions);
         setQuestionList(data[0]?.questions);
+        
       } else {
         console.warn('Question data format is invalid or empty');
         // Handle invalid data or set default values for questionList
@@ -403,16 +405,27 @@ const QuestionForm = () => {
     for(key in score){
       calculatedScore += score[key];
     }
-    console.log("score" , calculatedScore);
-    navigation.navigate('healthCard', {score : calculatedScore});
-    return;
+    let calculateMaxScore = 0;
+        questionList.map((item) => {
+          item.optionValue.map((optionScore) => {
+            console.log(optionScore);
+            calculateMaxScore = calculateMaxScore +  optionScore;
+          })
+        })
+      console.log(calculateMaxScore);
+
+    const scoreToStore = {score : calculatedScore , maxScore : calculateMaxScore};
+    // console.log(scoreToStore);
+  
+    await storeInAsyncStorage(Askeys.SCORE , scoreToStore);
+    navigation.navigate('healthCard');
     const abhaId = await getFromAsyncStorage("abhaId");
     console.log("fetched abhaid :", abhaId);
-    insertResponseToDb(abhaId , answerIds , score).then(() => {
+    insertResponseToDb(abhaId , answerIds , calculatedScore).then(() => {
       console.log("Questionnaire response submitted sucessfully");
      
     }).catch(() => {
-      console.log("Error submitting questionnaire data");
+      console.log("Error submitting questiiionnaire data");
     });
     
     // You can add your logic here to process the answers
@@ -449,7 +462,7 @@ const QuestionForm = () => {
         <Button
           mode="contained"
           style={styles.submitButton}
-          onPress={handleSubmit}
+          onPress={() => handleSubmit()}
         >
           Submit
         </Button>
