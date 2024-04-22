@@ -1,4 +1,6 @@
-export const BASE_URL = "http://192.168.195.137:8080";
+export const BASE_URL = "http://192.168.193.137:8080";
+
+export const LOGIN = "/auth/signin";
 
 export const Register_Patient = "/FieldHealthCareWorker/registerCitizens";
 
