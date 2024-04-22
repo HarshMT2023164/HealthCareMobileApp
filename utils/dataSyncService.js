@@ -15,8 +15,11 @@ import {
   Register_Patient
 } from "../common/Constants/URLs";
 import { TableNames } from "../common/Constants/DBConstants";
+import { Askeys, getFromAsyncStorage } from "./AsyncStorageService";
 
 const syncRegisterData = async () => {
+
+
   try {
     let formData = await fetchAllFormData();
     console.log(formData);
@@ -39,7 +42,7 @@ const syncRegisterData = async () => {
     if (reqBody.length > 0) {
       // Make API call to sync data with backend
       const keyToAdd = "fieldHealthCareWorkerUsername";
-      const valueToAdd = "FHW41545";
+      const valueToAdd = await getFromAsyncStorage(Askeys.FHW_USERNAME);
 
       // // Using map to create a new array with updated objects
       const updatedFormData = reqBody.map((item) => ({
@@ -52,10 +55,15 @@ const syncRegisterData = async () => {
       };
 
       console.log(objWithListOfPatient);
+      const token = await getFromAsyncStorage(Askeys.TOKEN);
 
       const response = await axios.post(
         BASE_URL + Register_Patient,
-        objWithListOfPatient
+        objWithListOfPatient,{
+          headers : {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
 
       if (response.status === 200) {
@@ -101,10 +109,15 @@ const syncResponseData = async () => {
       };
 
       console.log(objWithListOfResponses);
-
+      const token = await getFromAsyncStorage(Askeys.TOKEN);
       const response = await axios.post(
         BASE_URL + ADD_RESPONSES,
-        objWithListOfResponses
+        objWithListOfResponses,
+        {
+          headers : {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
 
       if (response.status === 200) {
@@ -140,10 +153,16 @@ const syncDocAssignData = async () => {
       };
 
       console.log(objWithListOfAssigns);
+      const token = await getFromAsyncStorage(Askeys.TOKEN);
 
       const response = await axios.post(
         BASE_URL + ASSIGN_DOCTOR,
-        objWithListOfAssigns
+        objWithListOfAssigns,
+        {
+          headers : {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
 
       if (response.status === 200) {
@@ -171,7 +190,7 @@ const syncDataWithBackend = async () => {
 
       if (isConnected) {
         // Make API call to sync data with backend
-        
+        // deleteAllTableFromSync();
         await syncRegisterData();
         await syncResponseData();
         await syncDocAssignData();
@@ -185,5 +204,12 @@ const syncDataWithBackend = async () => {
     console.error("Error syncing form data with backend:", error);
   }
 };
+
+export const deleteAllTableFromSync = async () => {
+  await deleteAllFormData();
+  await deleteAllDataFromTable(TableNames.RegisterResponses);
+  await deleteAllDataFromTable(TableNames.DoctorAssignment);
+
+}
 
 export { syncDataWithBackend };
