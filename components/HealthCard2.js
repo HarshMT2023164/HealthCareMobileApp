@@ -4,9 +4,9 @@ import { StyleSheet, View } from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { Button, Card, Icon, Surface, Text } from 'react-native-paper';
 import { fetchDoctorsFromDb } from '../common/Database';
+import { Askeys, getFromAsyncStorage } from "../utils/AsyncStorageService";
 
 const HealthCard2 = () => {
-  const {score} = useRoute().params;
   const navigation = useNavigation();
 
   const [user,setUser] = useState({
@@ -14,6 +14,7 @@ const HealthCard2 = () => {
     age:'',
     gender:'',
   });
+  const [scoreObj , setScoreObj] = useState({score: 0 , maxScore : 29});
 
   const fetchDoctors = async() => {
     console.log("called f");
@@ -24,11 +25,21 @@ const HealthCard2 = () => {
       console.error('Error fetching doctors:', error);
     }
   };
+  
 
+  const setFromAsyncStorage = async () => {
+    const res = await getFromAsyncStorage(Askeys.REGISTER_USER);
+    setUser(res);
+    const score = await getFromAsyncStorage(Askeys.SCORE);
+    console.log(score);
+    setScoreObj(score);
+
+  }
 
   useEffect(() => {
-    fetchDoctors();
-  })
+    setFromAsyncStorage();
+  
+  },[])
 
   
   const handleContinue = ()=>{
@@ -62,16 +73,17 @@ const HealthCard2 = () => {
       <Surface mode='elevated' style={styles.scoreCardSurface} elevation={4}>
          <View mode="flat" style={styles.namecard}>
           <View><Icon source='account'size={24} color='black'/></View>
-          <View><Text style={{fontWeight:'bold',fontSize:16,}}>Prakash Patel  |</Text></View>
-          <View><Text style={{fontWeight:'bold',fontSize:16,}}>35  |</Text></View>
-          <View><Text style={{fontWeight:'bold',fontSize:16,}}>Male</Text></View>
+          <View><Text style={{fontWeight:'bold',fontSize:16,}}>{user?.name}  |</Text></View>
+          <View><Text style={{fontWeight:'bold',fontSize:16,}}>{user?.age}  |</Text></View>
+          <View><Text style={{fontWeight:'bold',fontSize:16,}}>{user?.gender}</Text></View>
          </View>
       {/* <Text style={styles.title}>Health Score</Text> */}
+      
       <CircularProgress
        title='Health Score'
-       maxValue={100}
+       maxValue={scoreObj.maxScore}
        titleFontSize={16}
-        value={score}
+        value={scoreObj.score}
         radius={100}
         inActiveStrokeOpacity={0.5}
         activeStrokeWidth={15}
@@ -79,7 +91,7 @@ const HealthCard2 = () => {
         progressValueStyle={{ fontWeight: '100', color: 'green' }}
         activeStrokeSecondaryColor="yellow"
         inActiveStrokeColor="black"
-        duration={5000}
+        duration={1000}
         dashedStrokeConfig={{
             count: 50,
             width: 4,
