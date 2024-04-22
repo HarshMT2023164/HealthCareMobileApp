@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { Button, Card, TextInput, Title } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
+import { BASE_URL, LOGIN } from '../common/Constants/URLs';
+import axios from 'axios';
+import { Askeys, storeInAsyncStorage } from '../utils/AsyncStorageService';
 const Login = () => {
 
   const navigation = useNavigation();
@@ -25,53 +28,56 @@ const Login = () => {
   const authenticate = async () => {
 
     //Static
-    try {
-      if (user.password !== '123456') {
-        throw new Error("Username or password incorrect");
-      }
+    // try {
+    //   if (user.password !== '123456') {
+    //     throw new Error("Username or password incorrect");
+    //   }
     
-      await AsyncStorage.setItem("token", "trial123");
-      console.log(await AsyncStorage.getItem("token"));
-      console.log("Authentication successful!");
-      setErrorMessage("");
-      navigation.navigate('TabNavigation');
-    } 
-    catch (err) {
-      // Check if the error message is specific to invalid username or password
-      if (err.message === "Username or password incorrect") {
-        setErrorMessage("Username or password is incorrect");
-      } else {
-        // Handle other types of errors
-        setErrorMessage("An error occurred while authenticating");
-        console.error(err);
-      }
-    }
+    //   await AsyncStorage.setItem("token", "trial123");
+    //   console.log(await AsyncStorage.getItem("token"));
+    //   console.log("Authentication successful!");
+    //   setErrorMessage("");
+    //   navigation.navigate('TabNavigation');
+    // } 
+    // catch (err) {
+    //   // Check if the error message is specific to invalid username or password
+    //   if (err.message === "Username or password incorrect") {
+    //     setErrorMessage("Username or password is incorrect");
+    //   } else {
+    //     // Handle other types of errors
+    //     setErrorMessage("An error occurred while authenticating");
+    //     console.error(err);
+    //   }
+    // }
 
     //Dynamic
-  //   try {
-  //     const res = await axios.post("http://192.168.127.137:8080/auth/signin", user);
-    
-  //     // Check if the response status is in the success range (200-299)
-  //     if (res.status >= 200 && res.status < 300) {
-  //       // Successful response
-  //       console.log(await AsyncStorage.getItem("token"));
-  //       console.log("Authentication successful!");
-  //       console.log(res.data.jwtResponse.accessToken);
-  //       await AsyncStorage.setItem("token", res.data.jwtResponse.accessToken);
-  //       navigation.navigate('HealthCard2');
+    try {
+      console.log("called");
+      const res = await axios.post(BASE_URL + LOGIN, user);
+      
+      // Check if the response status is in the success range (200-299)
+      if (res.status >= 200 && res.status < 300) {
+        // Successful response
+        // console.log(await AsyncStorage.getItem("token"));
+        console.log("Authentication successful!");
+        console.log(res.data)
 
-  //     } else {
-  //       // Error response
-  //       setErrorMessage("Username or password is incorrect");
-  //       console.log('Username or password incorrect');
-  //     }
-  //   } catch (err) {
-  //     // Error caught in the catch block
-  //     setErrorMessage("An error occurred while authenticating");
-  //     console.error(err); // Log the actual error for debugging
-  //   }
-  // };
-  }
+        await storeInAsyncStorage(Askeys.TOKEN, res.data.jwtResponse.accessToken);
+        await storeInAsyncStorage(Askeys.FHW_USERNAME, res?.data?.userRole?.username);
+        navigation.navigate('TabNavigation');
+
+      } else {
+        // Error response
+        setErrorMessage("Username or password is incorrect");
+        console.log('Username or password incorrect');
+      }
+    } catch (err) {
+      // Error caught in the catch block
+      setErrorMessage("An error occurred while authenticating");
+      console.error(err); // Log the actual error for debugging
+    }
+  };
+
 
   const handleInputChange = (name, value) => {
     setUser({
