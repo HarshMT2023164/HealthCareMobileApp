@@ -163,6 +163,7 @@ export default function App() {
         />
           <Stack.Screen name="LoginScreen" component={Login} options={{title:''}}/>
           <Stack.Screen name="TabNavigation" component={TabNavigation} options={{headerShown:false}}/>
+          <Stack.Screen name="followUpList" component={FollowUpListScreen} options={{headerShown:false}}/>
           <Stack.Screen name="register" component={Registration} options={{headerShown:false}}/>
           <Stack.Screen name="question" component={Questionnaire} options={{headerShown:false}}/>
           <Stack.Screen name="healthCard" component={HealthCard2} options={{headerShown:false}}/>
@@ -191,8 +192,13 @@ export default function App() {
   // );
 )};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+
+
+const styles = StyleSheet.create(
+  {
+    container:
+    {
+      flex:1,
+    }
+  }
+)
