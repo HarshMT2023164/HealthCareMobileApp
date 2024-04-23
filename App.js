@@ -168,6 +168,8 @@ export default function App() {
           <Stack.Screen name="question" component={Questionnaire} options={{headerShown:false}}/>
           <Stack.Screen name="healthCard" component={HealthCard2} options={{headerShown:false}}/>
           <Stack.Screen name="doctorList" component={DoctorListScreen} options={{headerShown:false}}/>
+          <Stack.Screen name='MedReport' component={MedicalReport} options={{headerShown:false}}/>
+          <Stack.Screen name='FollowUpScreen' component={FollowUpScreen} options={{headerShown:false}}/>
         </Stack.Navigator>
       </NavigationContainer>
       </View>
