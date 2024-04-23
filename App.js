@@ -18,16 +18,18 @@ import WelcomeScreen from './components/WelcomeScreen';
 
 import * as LocalAuthentication from 'expo-local-authentication';
 import Login from './components/login';
+import { Askeys } from './utils/AsyncStorageService';
 
 export default function App() {
 
   const fetchDoctorsList  = async() => {
      try {
+      const token = await AsyncStorage.getItem(Askeys.TOKEN);
         
         const response = await axios.get(`${BASE_URL+FETCH_DOCTORLIST}?username=${"FHW41545"}`, {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         console.log(response.data);
 
@@ -67,11 +69,11 @@ export default function App() {
 
   const fetchQuestionnaire = async() => {
       try {
-        
+        const token = await AsyncStorage.getItem(Askeys.TOKEN)
         const response = await axios.get(`${BASE_URL+FETCH_QUESTIONNAIRE}?id=${2}`, {
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         console.log(response.data);
         deleteAllDataFromTable(TableNames.QuestionnaireTable).then((rowsAffected) => {
@@ -132,7 +134,7 @@ export default function App() {
   useEffect(() => {
     console.log("hello");
     setupDatabase();
-    fetchOnAppLoad();
+    // fetchOnAppLoad();
 
      // Initialize SQLite database
   }, []);

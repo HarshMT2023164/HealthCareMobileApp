@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Avatar, Button, Surface, Text } from 'react-native-paper';
 import { fetchAllFormData, fetchDoctorsFromDb, fetchResponsesFromDb, insertDoctorAssignmentToDb } from '../common/Database';
 import { getFromAsyncStorage } from '../utils/AsyncStorageService';
+import { useNavigation } from '@react-navigation/native';
 
 // const data =[
 //   {
@@ -37,7 +38,7 @@ import { getFromAsyncStorage } from '../utils/AsyncStorageService';
 
 export default function DoctorListScreen() {
   const [doctorList , setDoctorList] = useState([]);
-
+  const navigation = useNavigation();
   const fetchRegistrationData = async() => {
     try {
       const data = await fetchAllFormData();
@@ -108,6 +109,7 @@ export default function DoctorListScreen() {
       insertDoctorAssignmentToDb({abhaId : abhaId , doctorUsername : docUsername}).then(() => {
     
         console.log("doctor assignment data inserted successfully");
+        navigation.push("TabNavigation");
       }).catch(() => {
         console.log("Error inserting doctor assignment");
       })

@@ -15,7 +15,7 @@ import { syncDataWithBackend } from "../utils/dataSyncService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Askeys, getFromAsyncStorage } from "../utils/AsyncStorageService";
 import axios from "axios";
-import { BASE_URL, FETCH_DOCTORLIST, FETCH_QUESTIONNAIRE } from "../common/Constants/URLs";
+import { BASE_URL, FETCH_DOCTORLIST, FETCH_FOLLOW_UP_LIST, FETCH_QUESTIONNAIRE } from "../common/Constants/URLs";
 import { deleteAllDataFromTable, insertDoctorToDb, insertQuestionnaireData } from "../common/Database";
 import { TableNames } from "../common/Constants/DBConstants";
 const Home = () => {
@@ -110,9 +110,31 @@ const Home = () => {
     }
   };
 
+  const fetchFollowUpData = async () => {
+    try {
+      const token = await getFromAsyncStorage(Askeys.TOKEN);
+      const FHWUsername = await getFromAsyncStorage(Askeys.FHW_USERNAME);
+      console.log(token);
+      const response = await axios.get(
+        `${BASE_URL + FETCH_FOLLOW_UP_LIST}?username=${FHWUsername}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      // setLoading(true); // Set loading to false if there's an error
+    }
+  };
+
+
   const fetchOnAppLoad = async () => {
     await fetchDoctorsList();
     await fetchQuestionnaire();
+    await fetchFollowUpData();
   };
 
   const [isConnected, setIsConnected] = useState("Not connected");
