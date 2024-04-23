@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { Button, Card, RadioButton, Text } from "react-native-paper";
 import { deleteAllDataFromTable, fetchDoctorAssignmentsFromDb, fetchDoctorsFromDb, fetchQuestionnaireFromDb, fetchResponsesFromDb, insertDoctorToDb, insertResponse, insertResponseToDb } from "../common/Database";
 
@@ -398,7 +398,7 @@ const QuestionForm = () => {
   const totalQuestions = questionList.length;
 
   if (answeredQuestions.length !== totalQuestions) {
-    console.log('Please answer all questions before submitting.');
+    Alert.alert("Please answer all questions before submitting.");
     return; // Don't proceed with submission
   }
     let calculatedScore = 0;
@@ -418,11 +418,12 @@ const QuestionForm = () => {
     // console.log(scoreToStore);
   
     await storeInAsyncStorage(Askeys.SCORE , scoreToStore);
-    navigation.navigate('healthCard');
+    
     const abhaId = await getFromAsyncStorage("abhaId");
     console.log("fetched abhaid :", abhaId);
     insertResponseToDb(abhaId , answerIds , calculatedScore).then(() => {
       console.log("Questionnaire response submitted sucessfully");
+      navigation.navigate('healthCard');
      
     }).catch(() => {
       console.log("Error submitting questiiionnaire data");

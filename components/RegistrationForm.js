@@ -89,24 +89,49 @@ const RegistrationForm = () => {
       "district",
       "abhaId",
     ];
-    const missingFields = requiredFields.filter((field) => !form[field]);
+   const abhaIdRegex = /^AB.{5}$/;
 
-    if (missingFields.length > 0) {
-      // Set error state for missing fields
-      const newErrorFields = {};
-      requiredFields.forEach((field) => {
-        newErrorFields[field] = !form[field];
-      });
-      setErrorFields(newErrorFields);
+  // Check if abhaId matches the regex pattern
+  if (!abhaIdRegex.test(form.abhaId)) {
+    setErrorFields({
+      ...errorFields,
+      abhaId: true,
+    });
+    Alert.alert("Error", "Abha ID must start with 'AB' followed by 5 characters");
+    return;
+  }
 
-      Alert.alert("Error", "Please fill out all required fields");
-      return;
-    }
+  const missingFields = requiredFields.filter((field) => !form[field]);
+
+  if (missingFields.length > 0) {
+    // Set error state for missing fields
+    const newErrorFields = {};
+    requiredFields.forEach((field) => {
+      newErrorFields[field] = !form[field];
+    });
+    setErrorFields(newErrorFields);
+
+    Alert.alert("Error", "Please fill out all required fields");
+    return;
+  }
 
     if (isNaN(Number(form.age)) || isNaN(Number(form.pincode))) {
       Alert.alert("Error", "Please enter a valid age and pincode");
       return;
     }
+
+    if (isNaN(Number(form.age)) || Number(form.age) <= 0 || Number(form.age) > 150) {
+      Alert.alert("Error", "Please enter a valid age (between 1 and 150)");
+      return;
+    }
+  
+    if (isNaN(Number(form.pincode)) || form.pincode.length !== 6) {
+      Alert.alert("Error", "Please enter a valid 6-digit pincode");
+      return;
+    }
+
+
+
 
     insertFormData(form).then(() => {
       storeInAsyncStorage("abhaId", form.abhaId);
@@ -282,15 +307,9 @@ const RegistrationForm = () => {
           onPress={() => clearForm()}
           style={styles.button}
         >
-          <Text style={{fontSize:12}}>Clear form</Text>
+          <Text>Clear Form</Text>
         </Button>
-        <Button
-          mode="contained"
-          onPress={() => handleSync()}
-          style={styles.button}
-        >
-          Sync
-        </Button>
+        
       </View>
     </View>
   );
@@ -304,7 +323,7 @@ const styles = StyleSheet.create({
     
   },
   button: {
-    width: "33%",
+    width: "47%",
     marginTop: 20,
     height : "70%",
     backgroundColor : "#7aa8d2"
