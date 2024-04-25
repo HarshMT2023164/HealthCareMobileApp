@@ -13,12 +13,18 @@ import Questionnaire from './components/Questionnaire';
 import Registration from './components/Registration';
 import TabNavigation from './components/TabNavigation';
 
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import WelcomeScreen from './components/WelcomeScreen';
 
 import * as LocalAuthentication from 'expo-local-authentication';
 import Login from './components/login';
 import { Askeys } from './utils/AsyncStorageService';
+import FollowUpListScreen from './components/followUpList';
+import MedicalReport from './components/MedicalReport';
+import FollowUpScreen from './components/FollowUpScreen';
+import { LanguageProvider } from './utils/Context/LanguageContext';
+import { I18nextProvider } from 'react-i18next';
+import i18next from 'i18next';
 
 export default function App() {
 
@@ -150,31 +156,34 @@ export default function App() {
   const Stack = createStackNavigator();
 
   return (
-    <PaperProvider>
-      <View style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="ZENCARE">
-        <Stack.Screen
-          name='ZENCARE'
-          component={WelcomeScreen}
-          options={{
-            headerShown:false, // Set a custom title
-          }}
-        />
-          <Stack.Screen name="LoginScreen" component={Login} options={{title:''}}/>
-          <Stack.Screen name="TabNavigation" component={TabNavigation} options={{headerShown:false}}/>
-          <Stack.Screen name="followUpList" component={FollowUpListScreen} options={{headerShown:false}}/>
-          <Stack.Screen name="register" component={Registration} options={{headerShown:false}}/>
-          <Stack.Screen name="question" component={Questionnaire} options={{headerShown:false}}/>
-          <Stack.Screen name="healthCard" component={HealthCard2} options={{headerShown:false}}/>
-          <Stack.Screen name="doctorList" component={DoctorListScreen} options={{headerShown:false}}/>
-          <Stack.Screen name='MedReport' component={MedicalReport} options={{headerShown:false}}/>
-          <Stack.Screen name='FollowUpScreen' component={FollowUpScreen} options={{headerShown:false}}/>
-        </Stack.Navigator>
-      </NavigationContainer>
-      </View>
-    </PaperProvider>
-    
+    <LanguageProvider>
+      <I18nextProvider i18n={i18next}>
+        <PaperProvider>
+          <View style={styles.container}>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="TabNavigation">
+            <Stack.Screen
+              name='ZENCARE'
+              component={WelcomeScreen}
+              options={{
+                headerShown:false, // Set a custom title
+              }}
+            />
+              <Stack.Screen name="LoginScreen" component={Login} options={{title:''}}/>
+              <Stack.Screen name="TabNavigation" component={TabNavigation} options={{headerShown:false}}/>
+              <Stack.Screen name="followUpList" component={FollowUpListScreen} options={{headerShown:false}}/>
+              <Stack.Screen name="register" component={Registration} options={{headerShown:false}}/>
+              <Stack.Screen name="question" component={Questionnaire} options={{headerShown:false}}/>
+              <Stack.Screen name="healthCard" component={HealthCard2} options={{headerShown:false}}/>
+              <Stack.Screen name="doctorList" component={DoctorListScreen} options={{headerShown:false}}/>
+              <Stack.Screen name='MedReport' component={MedicalReport} options={{headerShown:false}}/>
+              <Stack.Screen name='FollowUpScreen' component={FollowUpScreen} options={{headerShown:false}}/>
+            </Stack.Navigator>
+          </NavigationContainer>
+          </View>
+        </PaperProvider>
+        </I18nextProvider>
+        </LanguageProvider>
 
   // return (
   //   <GestureHandlerRootView>

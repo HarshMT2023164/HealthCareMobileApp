@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Card, Surface, Text, TextInput, IconButton } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 
 const FollowUpScreen = () => {
   const [noteText, setNoteText] = useState("");
+
+    //Multilingual
+    const {t} = useTranslation();
 
   const handleInputChange = (inputText) => {
     setNoteText(inputText);
@@ -12,7 +16,7 @@ const FollowUpScreen = () => {
   return (
     <View style={styles.container}>
       <Surface mode="elevated" style={styles.followUpHeading}>
-        <Text variant="titleMedium">Instructions</Text>
+        <Text variant="titleMedium">{t('Instructions')}</Text>
       </Surface>
       <Surface mode="elevated" elevation={4} style={styles.followUpCard}>
         <Card.Content>
@@ -32,7 +36,7 @@ const FollowUpScreen = () => {
       <Card style={styles.notesCard}>
         <Card.Content >
           <TextInput style={styles.notesCardContent}
-            label="Notes"
+            label={t('Notes')}
             value={noteText}
             onChangeText={handleInputChange}
             multiline

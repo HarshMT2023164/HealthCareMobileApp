@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Avatar, Button, Surface, Text } from 'react-native-paper';
+import { useTranslation } from 'react-i18next';
 
 
 const data =[
@@ -44,11 +45,15 @@ const data =[
 ]
 
 export default function FollowUpListScreen() {
+
+  //Multilingual
+  const {t} = useTranslation();
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.headingContainer}>
-          <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 16 }}>Follow Up List</Text>
+          <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 16 }}>{t('Follow-Up-List')}</Text>
         </View>
         {data.map((citizen, index) => (
           <Surface key={index} mode='elevated' elevation={4} style={styles.surfaceItem}>

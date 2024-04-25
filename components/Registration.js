@@ -4,18 +4,23 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button, useTheme } from "react-native-paper";
 import RegistrationForm from "./RegistrationForm";
 import { useNavigation } from "@react-navigation/core";
+import { useTranslation } from "react-i18next";
 
 
 const Registration = () => {
   const theme = useTheme();
   const navigation = useNavigation();
+
+  //Multilingual
+  const {t} = useTranslation();
+  
   return (
     <View style={styles.contaier}>
       <View style={styles.heading}>
         <Ionicons name="arrow-back" size={24} color={"white"} onPress={()=>navigation.goBack()}/>
         <View style={styles.subHeadCont}>
         <FontAwesome style={{padding : 10 , backgroundColor: "white", borderRadius : 100 }} name="wpforms" size={24}  color={"black"}/>
-        <Text style={styles.headingText}>Register Patient</Text>
+        <Text style={styles.headingText}>{t('Register-Patient')}</Text>
         </View>
       </View>
     <ScrollView>

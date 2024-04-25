@@ -33,7 +33,7 @@ const WelcomeScreen = () => {
                         style={styles.loginButton}
                         labelStyle={styles.buttonText}
                     >
-                        Let's Get Started
+                       {t('Welcome')}
                     </Button>
                 </View>
             </View>

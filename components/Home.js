@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, Image, ScrollView } from "react-native";
 import {
   Appbar,
@@ -18,10 +18,18 @@ import axios from "axios";
 import { BASE_URL, FETCH_DOCTORLIST, FETCH_FOLLOW_UP_LIST, FETCH_QUESTIONNAIRE } from "../common/Constants/URLs";
 import { deleteAllDataFromTable, insertDoctorToDb, insertQuestionnaireData } from "../common/Database";
 import { TableNames } from "../common/Constants/DBConstants";
+import LanguageContext from "../utils/Context/LanguageContext";
+import { useTranslation } from "react-i18next";
+import { changeLanguage } from "i18next";
+
 const Home = () => {
   const [selectedValue, setSelectedValue] = useState("option2");
   const [currentDate, setCurrentDate] = useState(new Date());
   const navigation = useNavigation();
+
+  //Multilingual
+  const {changeLanguage} = useContext(LanguageContext);
+  const {t} = useTranslation();
 
   const fetchDoctorsList = async () => {
     try {
@@ -190,13 +198,16 @@ const Home = () => {
             mode="dropdown"
             selectedValue={selectedValue}
             onValueChange={(itemValue, itemIndex) =>
-              setSelectedValue(itemValue)
+              {
+                setSelectedValue(itemValue);
+                changeLanguage(itemValue);
+              }
             }
             style={styles.appbarDropdown}
           >
-            <Picker.Item label="English" value="Language 1" />
-            <Picker.Item label="Hindi" value="Language 2" />
-            <Picker.Item label="Gujarati" value="Language 3" />
+            <Picker.Item label={t('English')} value="en" />
+            <Picker.Item label={t('Hindi')} value="hin" />
+            <Picker.Item label={t('Gujarati')} value="guj" />
           </Picker>
         </View>
         <View style={styles.appbarItem3}>
@@ -223,7 +234,7 @@ const Home = () => {
       <View style={styles.MainContent}>
         <Card elevation={3} style={styles.MainContentCard}>
           <Card.Title
-            title="Register People"
+            title={t('Register')}
             right={() => (
               <Image
                 resizeMode="center"
@@ -241,13 +252,13 @@ const Home = () => {
               dark={false}
               style={styles.MainContentCardActionButton}
             >
-              Continue
+              {t('Continue')}
             </Button>
           </Card.Actions>
         </Card>
         <Card elevation={3} style={styles.MainContentCard}>
           <Card.Title
-            title="Follow Up"
+            title={t('Follow-Up')}
             right={() => (
               <Image
                 resizeMode="center"
@@ -265,7 +276,7 @@ const Home = () => {
               contentStyle={{ flexDirection: "row-reverse" }}
               style={styles.MainContentCardActionButton}
             >
-              Continue
+              {t('Continue')}
             </Button>
           </Card.Actions>
         </Card>

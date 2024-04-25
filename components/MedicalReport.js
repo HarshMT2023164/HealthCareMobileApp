@@ -2,8 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, StyleSheet,StatusBar} from "react-native";
 import { Avatar, Button, Card,Icon,Surface,Text} from "react-native-paper";
+import { useTranslation } from "react-i18next";
 
 const MedicalReport = () => {
+
+    //Multilingual
+    const {t} = useTranslation();
 
     const navigation = useNavigation();
     const handleFollowUp = ()=>
@@ -28,7 +32,7 @@ const MedicalReport = () => {
             </Surface>
             <Surface mode='elevated' elevation={4} style={styles.healthCard}>
                 <View style={styles.healthCardHeading}>
-                    <Text variant="titleMedium" >Diagnosis</Text>
+                    <Text variant="titleMedium" >{t('Diagnosis')}</Text>
                 </View>
                 <View style={styles.healthCardContent}>
                     <Text variant="bodyMedium">Name of disease</Text>
@@ -37,7 +41,7 @@ const MedicalReport = () => {
             </Surface>
             <Surface mode='elevated' elevation={4} style={styles.healthCard}>
                 <View style={styles.healthCardHeading}>
-                    <Text variant="titleMedium" >Observations</Text>
+                    <Text variant="titleMedium" >{t('Observations')}</Text>
                 </View>
                 <View style={styles.healthCardContent}>
                     <Text variant="bodyMedium" >Upon examination, notable symptoms indicative of anxiety disorder were observed, including [specific symptoms]. 
@@ -48,7 +52,7 @@ const MedicalReport = () => {
             </Surface>
             <Surface mode='elevated' elevation={4} style={styles.healthCard}>
                 <View style={styles.healthCardHeading}>
-                    <Text variant="titleMedium" >Prescription</Text>
+                    <Text variant="titleMedium" >{t('Prescription')}</Text>
                 </View>
                 <View style={styles.healthCardContent}>
                     <Text variant="bodyMedium">Based on our evaluation, I recommend starting a treatment regimen for your anxiety disorder. 
@@ -56,7 +60,7 @@ const MedicalReport = () => {
                      Follow-up in 4 weeks for assessment. Take care.</Text>
                 </View>
             </Surface>
-            <Button icon='chevron-right' mode='elevated' style={styles.followupButton} textColor='black' buttonColor='#c8e3f7' onPress={handleFollowUp} contentStyle={{flexDirection:'row-reverse'}}>FollowUp</Button>
+            <Button icon='chevron-right' mode='elevated' style={styles.followupButton} textColor='black' buttonColor='#c8e3f7' onPress={handleFollowUp} contentStyle={{flexDirection:'row-reverse'}}>{t('Follow-Up')}</Button>
         </View>
     );
 }

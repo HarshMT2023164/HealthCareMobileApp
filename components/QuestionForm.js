@@ -6,12 +6,16 @@ import { deleteAllDataFromTable, fetchDoctorAssignmentsFromDb, fetchDoctorsFromD
 
 import { TableNames } from '../common/Constants/DBConstants';
 import { Askeys, getFromAsyncStorage, storeInAsyncStorage } from '../utils/AsyncStorageService';
+import { useTranslation } from 'react-i18next';
 const QuestionForm = () => {
   const [answers, setAnswers] = useState({});
   const [answerIds, setAnswerIds] = useState({});
   const [questionList, setQuestionList] = useState([]);
   const navigation = useNavigation();
   const [score , setScore] = useState({});
+
+  //Multilingual
+  const {t} = useTranslation();
  
   const data = {
     "id": 2,
@@ -465,7 +469,7 @@ const QuestionForm = () => {
           style={styles.submitButton}
           onPress={() => handleSubmit()}
         >
-          Submit
+          {t('Submit')}
         </Button>
       </View>
       <View>

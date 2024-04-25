@@ -4,8 +4,13 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import QuestionForm from './QuestionForm';
+import { useTranslation } from 'react-i18next';
 const Questionnaire = () => {
   const navigation = useNavigation();
+
+  //Multilingual
+  const {t} = useTranslation();
+
   const onBackPress = () => {
     navigation.goBack();
   }
@@ -22,7 +27,7 @@ const Questionnaire = () => {
       </TouchableOpacity>
       <View style={styles.subHeadCont}>
       <FontAwesome6 style={{padding : 10 , backgroundColor: "white", borderRadius : 100 }} name="clipboard-question" size={24} color="black" />
-      <Text style={styles.headingText}>Questionnaire</Text>
+      <Text style={styles.headingText}>{t('Questionnaire')}</Text>
       </View>
     </View>
     <ScrollView>
