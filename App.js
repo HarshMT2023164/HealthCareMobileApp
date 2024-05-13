@@ -19,6 +19,9 @@ import WelcomeScreen from './components/WelcomeScreen';
 import * as LocalAuthentication from 'expo-local-authentication';
 import Login from './components/login';
 import { Askeys } from './utils/AsyncStorageService';
+import FollowUpListScreen from './components/followUpList';
+import MedicalReport from './components/MedicalReport';
+import FollowUpScreen from './components/FollowUpScreen';
 
 export default function App() {
 

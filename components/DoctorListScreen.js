@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Avatar, Button, Surface, Text } from 'react-native-paper';
-import { fetchAllFormData, fetchDoctorsFromDb, fetchResponsesFromDb, insertDoctorAssignmentToDb } from '../common/Database';
+import { fetchAllFormData, fetchAllHospitalsFromDb, fetchDoctorsFromDb, fetchResponsesFromDb, insertDoctorAssignmentToDb, insertHospitalAssignmentToDb } from '../common/Database';
 import { getFromAsyncStorage } from '../utils/AsyncStorageService';
 import { useNavigation } from '@react-navigation/native';
 
@@ -37,7 +37,7 @@ import { useNavigation } from '@react-navigation/native';
 
 
 export default function DoctorListScreen() {
-  const [doctorList , setDoctorList] = useState([]);
+  const [hospitalList , setHospitalList] = useState([]);
   const navigation = useNavigation();
   const fetchRegistrationData = async() => {
     try {
@@ -54,14 +54,14 @@ export default function DoctorListScreen() {
 
 
 
-  const fetchDoctors = async() => {
+  const fetchHospitals = async() => {
     try {
-      const data = await fetchDoctorsFromDb();
+      const data = await fetchAllHospitalsFromDb();
       console.log("Fetched Assessment Data:", (data));
   
       if (data && data.length > 0) {
         console.log("before setting data  :" , data);
-        setDoctorList(data);
+        setHospitalList(data);
       } else {
         console.warn('error in doctor list format ');
         // Handle invalid data or set default values for questionList
@@ -93,7 +93,7 @@ export default function DoctorListScreen() {
   useEffect(() => {
     //  getDoctorsAsync('doctorList');
 
-    fetchDoctors();
+    fetchHospitals();
     fetchRegistrationData();
     fetchResponses();
   },[])
@@ -103,12 +103,12 @@ export default function DoctorListScreen() {
     setDoctorList(json?.doctorListKey);
   };
 
-  const assignDoctor = async (docUsername) => {
+  const assignHospital = async (id) => {
     const abhaId = await getFromAsyncStorage("abhaId");
     console.log(abhaId);
-      insertDoctorAssignmentToDb({abhaId : abhaId , doctorUsername : docUsername}).then(() => {
+      insertHospitalAssignmentToDb({abhaId : abhaId , uhid : id}).then(() => {
     
-        console.log("doctor assignment data inserted successfully");
+        console.log("hospital assignment data inserted successfully");
         navigation.push("TabNavigation");
       }).catch(() => {
         console.log("Error inserting doctor assignment");
@@ -120,23 +120,23 @@ export default function DoctorListScreen() {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.headingContainer}>
-          <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 16 }}>Available Doctors</Text>
+          <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 16 }}>Available Hospitals</Text>
         </View>
-        {doctorList.map((doctor, index) => (
+        {hospitalList.map((item, index) => (
           <Surface key={index} mode='elevated' elevation={4} style={styles.surfaceItem}>
             <View style={styles.surfaceItemContent}>
               <View style={styles.surfaceItemAvatar}>
                 <Avatar.Icon icon='doctor' size={50} style={{ backgroundColor: '#f5f5f5', borderColor: 'lightgray', borderWidth: 1 }} />
               </View>
               <View style={styles.surfaceItemDetails}>
-                <Text>{doctor?.name}</Text>
-                <Text>{doctor?.gender}</Text>
-                <Text>{doctor?.email}</Text>
-                <Text>{doctor?.licenseId}</Text>
+                <Text>{item?.hospital?.name}</Text>
+                <Text>{item?.hospital?.address}</Text>
+                <Text>{item?.hospital?.email}</Text>
+                <Text>{item?.hospital?.numberOfBeds}</Text>
               </View>
             </View>
             <View style={styles.surfaceItemButton}>
-              <Button onPress={() => assignDoctor(doctor?.username)} icon='chevron-right' mode='contained' contentStyle={{ flexDirection: 'row-reverse', backgroundColor: '#7b9dbd' }}>Assign</Button>
+              <Button onPress={() => assignHospital(item?.hospital?.uhid)} icon='chevron-right' mode='contained' contentStyle={{ flexDirection: 'row-reverse', backgroundColor: '#7b9dbd' }}>Assign</Button>
             </View>
           </Surface>
         ))}

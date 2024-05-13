@@ -3,5 +3,9 @@ export const TableNames = {
     RegisterResponses : "Responses",
     QuestionnaireTable : "Questionnaire",
     DoctorListTable :  "DoctorsTable",
-    DoctorAssignment : "DoctorAssignment"
+    DoctorAssignment : "DoctorAssignment",
+    HospitalTable : "HospitalTable",
+    FollowUp : "FollowUp",
+    FollowUpInstructions : "FollowUpInstructions",
+    HospitalAssignments : "HospitalAssignment"
 }

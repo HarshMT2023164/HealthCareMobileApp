@@ -27,5 +27,7 @@ export const Askeys = {
   TOKEN : "token",
   FHW_USERNAME : "FHWUsername",
   SCORE : "score",
-  REGISTER_USER : "registerUserInfo"
+  REGISTER_USER : "registerUserInfo",
+  FOLLOWUP : "followUp",
+  ABHAID : "abhaId"
 }

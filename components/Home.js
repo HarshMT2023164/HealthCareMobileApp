@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image, ScrollView } from "react-native";
+import { TouchableOpacity, Animated } from "react-native";
+
 import {
   Appbar,
   Text,
@@ -7,6 +9,7 @@ import {
   Card,
   Button,
   TextInput,
+  Icon,
 } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
@@ -15,18 +18,31 @@ import { syncDataWithBackend } from "../utils/dataSyncService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Askeys, getFromAsyncStorage } from "../utils/AsyncStorageService";
 import axios from "axios";
-import { BASE_URL, FETCH_DOCTORLIST, FETCH_FOLLOW_UP_LIST, FETCH_QUESTIONNAIRE } from "../common/Constants/URLs";
-import { deleteAllDataFromTable, insertDoctorToDb, insertQuestionnaireData } from "../common/Database";
+import {
+  BASE_URL,
+  FETCH_DOCTORLIST,
+  FETCH_FOLLOW_UP_LIST,
+  FETCH_HOSPITALS,
+  FETCH_QUESTIONNAIRE,
+} from "../common/Constants/URLs";
+import {
+  deleteAllDataFromTable,
+  insertDoctorToDb,
+  insertFollowUpData,
+  insertHospitalData,
+  insertQuestionnaireData,
+} from "../common/Database";
 import { TableNames } from "../common/Constants/DBConstants";
 const Home = () => {
   const [selectedValue, setSelectedValue] = useState("option2");
   const [currentDate, setCurrentDate] = useState(new Date());
   const navigation = useNavigation();
+  const [spinValue, setSpinValue] = useState(new Animated.Value(0));
 
   const fetchDoctorsList = async () => {
     try {
       const token = await getFromAsyncStorage(Askeys.TOKEN);
-        console.log(token);
+      console.log(token);
       const response = await axios.get(
         `${BASE_URL + FETCH_DOCTORLIST}?username=${"FHW41545"}`,
         {
@@ -114,7 +130,8 @@ const Home = () => {
     try {
       const token = await getFromAsyncStorage(Askeys.TOKEN);
       const FHWUsername = await getFromAsyncStorage(Askeys.FHW_USERNAME);
-      console.log(token);
+      console.log("Token : ", token);
+      console.log("FHWUsername", FHWUsername);
       const response = await axios.get(
         `${BASE_URL + FETCH_FOLLOW_UP_LIST}?username=${FHWUsername}`,
         {
@@ -123,6 +140,33 @@ const Home = () => {
           },
         }
       );
+      console.log("Followup data",response.data);
+      deleteAllDataFromTable(TableNames.FollowUp)
+        .then((rowsAffected) => {
+          if (rowsAffected > 0) {
+            console.log("All followup data deleted successfully");
+            // Additional logic after successful deletion
+          } else {
+            console.log("No form data found to delete");
+          }
+          response?.data.forEach((followUp) => {
+            // console.log(doctor);
+            insertFollowUpData(followUp)
+              .then(() => {
+                console.log("inserted folloup ", followUp?.id);
+                // Additional logic after successful insertion (if needed)
+              })
+              .catch((error) => {
+                console.error(
+                  `Error inserting followUp '${followUp.id}':`,
+                  error
+                );
+              });
+          });
+        })
+        .catch((error) => {
+          console.error("Error deleting followup data table:", error);
+        });
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -131,10 +175,59 @@ const Home = () => {
   };
 
 
+  const fetchHospitalList = async() => {
+    try {
+      const token = await getFromAsyncStorage(Askeys.TOKEN);
+      const FHWUsername = await getFromAsyncStorage(Askeys.FHW_USERNAME);
+      console.log(token);
+      const response = await axios.get(
+        `${BASE_URL + FETCH_HOSPITALS}?username=${FHWUsername}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+
+      deleteAllDataFromTable(TableNames.HospitalTable)
+        .then((rowsAffected) => {
+          if (rowsAffected > 0) {
+            console.log("All form data deleted successfully");
+            // Additional logic after successful deletion
+          } else {
+            console.log("No form data found to delete");
+          }
+
+          response?.data.forEach((hospital) => {
+            // console.log(doctor);
+            insertHospitalData(hospital)
+              .then(() => {
+                console.log(`Hospital  inserted successfully`);
+                // Additional logic after successful insertion (if needed)
+              })
+              .catch((error) => {
+                console.error(
+                  `Error inserting hospital`,
+                  error
+                );
+              });
+          });
+        })
+        .catch((error) => {
+          console.error("Error deleting form data of hospital:", error);
+        });
+    } catch (error) {
+      console.log("ERROR OF THEN 2:", error);
+      // setLoading(true); // Set loading to false if there's an error
+    }
+  }
+
   const fetchOnAppLoad = async () => {
     await fetchDoctorsList();
     await fetchQuestionnaire();
     await fetchFollowUpData();
+    await fetchHospitalList();
   };
 
   const [isConnected, setIsConnected] = useState("Not connected");
@@ -177,7 +270,23 @@ const Home = () => {
     minute: "2-digit",
   });
 
+  const onSyncPress = () => {
+    startSyncAnimation();
+    syncDataWithBackend()
+  }
+
   ////Dyamic
+  const startSyncAnimation = () => {
+    Animated.timing(spinValue, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start(() => {
+      // Once animation completes, reset the spin value
+      setSpinValue(new Animated.Value(0));
+    });
+  };
+
   return (
     <View style={styles.HomePage}>
       <Appbar.Header style={styles.appbarContainer}>
@@ -200,12 +309,25 @@ const Home = () => {
           </Picker>
         </View>
         <View style={styles.appbarItem3}>
-          <AntDesign
-            name="sync"
-            size={24}
-            color="black"
-            onPress={() => syncDataWithBackend()}
-          />
+          <TouchableOpacity onPress={() => onSyncPress()}>
+            <Animated.View
+              style={[
+                styles.appbarItem3,
+                {
+                  transform: [
+                    {
+                      rotate: spinValue.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["0deg", "360deg"],
+                      }),
+                    },
+                  ],
+                },
+              ]}
+            >
+              <Icon source="sync" size={30} />
+            </Animated.View>
+          </TouchableOpacity>
         </View>
       </Appbar.Header>
       {/* <View style={styles.dateTimeContainer}>
@@ -260,7 +382,9 @@ const Home = () => {
             <Button
               mode="contained"
               dark={false}
-              onPress={() => console.log("Choice: Follow Ups")}
+              onPress={() => {
+                navigation.push("followUpList");
+              }}
               icon="chevron-right"
               contentStyle={{ flexDirection: "row-reverse" }}
               style={styles.MainContentCardActionButton}
@@ -326,6 +450,7 @@ const styles = StyleSheet.create({
   },
   appbarContainer: {
     marginTop: 10,
+    display: "flex",
     // backgroundColor: '#E1F5FE', // Light blue background color
     backgroundColor: "white",
     flexDirection: "row",
@@ -341,7 +466,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 10,
     borderRadius: 15,
-    width: "30%", // Adjusted width for Surface
+    width: "35%", // Adjusted width for Surface
   },
   appbarItem2: {
     backgroundColor: "#FFFFFF", // White
@@ -350,13 +475,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     marginBottom: 10,
-    width: "40%",
+    width: "35%",
   },
   appbarItem3: {
-    padding: 10,
-    width: "20%",
+    // padding: 10,
+    width: "30%",
     display: "flex",
     alignItems: "center",
+    padding : 0
   },
   appbarItemText: {
     fontSize: 16,

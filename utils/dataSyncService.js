@@ -5,12 +5,16 @@ import {
   deleteAllFormData,
   fetchAllFormData,
   fetchDoctorAssignmentsFromDb,
+  fetchFollowUpInstructionData,
+  fetchHospitalAssignmentsFromDb,
   fetchResponsesFromDb
 } from "../common/Database";
 
 import {
+  ADD_FOLLOWUP_INSTRUCTIONS,
   ADD_RESPONSES,
   ASSIGN_DOCTOR,
+  ASSIGN_HOSPITAL,
   BASE_URL,
   Register_Patient
 } from "../common/Constants/URLs";
@@ -137,10 +141,10 @@ const syncResponseData = async () => {
 };
 
 
-const syncDocAssignData = async () => {
+const syncHospitalAssignData = async () => {
   
   try {
-    let formData = await fetchDoctorAssignmentsFromDb();
+    let formData = await fetchHospitalAssignmentsFromDb();
     console.log(formData);
     
     
@@ -149,15 +153,60 @@ const syncDocAssignData = async () => {
       // Make API call to sync data with backend
 
       const objWithListOfAssigns = {
-        doctorAssignments: formData,
+        hospitalAssignments: formData,
       };
 
       console.log(objWithListOfAssigns);
       const token = await getFromAsyncStorage(Askeys.TOKEN);
 
       const response = await axios.post(
-        BASE_URL + ASSIGN_DOCTOR,
+        BASE_URL + ASSIGN_HOSPITAL,
         objWithListOfAssigns,
+        {
+          headers : {
+            Authorization: `Bearer ${token}`,
+            
+          }
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Assign data synced with backend successfully.");
+        await deleteAllDataFromTable(TableNames.HospitalAssignments);
+        // Optional: Handle successful sync (e.g., clear locally stored data)
+      } else {
+        console.error("Failed to sync assign data with backend:", response.data);
+      }
+    }
+    else{
+      console.log("no locally stored data to sync");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const syncFollowUpInstructionData = async () => {
+  
+  try {
+    let followUpData = await fetchFollowUpInstructionData();
+    console.log(followUpData);
+    
+    
+
+    if (followUpData.length > 0) {
+      // Make API call to sync data with backend
+
+      const objWithListOfFollowUpInstructions = {
+        followUpInstructionsRequests: followUpData,
+      };
+
+      console.log(objWithListOfFollowUpInstructions);
+      const token = await getFromAsyncStorage(Askeys.TOKEN);
+
+      const response = await axios.post(
+        BASE_URL + ADD_FOLLOWUP_INSTRUCTIONS,
+        objWithListOfFollowUpInstructions,
         {
           headers : {
             Authorization: `Bearer ${token}`
@@ -166,8 +215,8 @@ const syncDocAssignData = async () => {
       );
 
       if (response.status === 200) {
-        console.log("Assign data synced with backend successfully.");
-        await deleteAllDataFromTable(TableNames.DoctorAssignment);
+        console.log("followUp instruction data synced with backend successfully.");
+        await deleteAllDataFromTable(TableNames.FollowUpInstructions);
         // Optional: Handle successful sync (e.g., clear locally stored data)
       } else {
         console.error("Failed to sync assign data with backend:", response.data);
@@ -193,7 +242,8 @@ const syncDataWithBackend = async () => {
         // deleteAllTableFromSync();
         await syncRegisterData();
         await syncResponseData();
-        await syncDocAssignData();
+        await syncHospitalAssignData();
+        await syncFollowUpInstructionData();
 
       } else {
         console.log(
