@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { Card, Surface, Text, TextInput, IconButton, Avatar, Icon, Button } from "react-native-paper";
+import {  Avatar, Icon, Button } from "react-native-paper";
 import { Askeys, getFromAsyncStorage, storeInAsyncStorage } from "../utils/AsyncStorageService";
-import { Ionicons } from '@expo/vector-icons';
-import { deleteAllDataFromTable, fetchFollowUpInstructionData, insertFollowUpInstructionData, updateFollowUpById } from "../common/Database";
+
+import { insertFollowUpInstructionData, updateFollowUpById } from "../common/Database";
 import { ADD_FOLLOUP_INSTRUCTIONS, BASE_URL } from "../common/Constants/URLs";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import { Card, Surface, Text, TextInput } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 const FollowUpScreen = () => {
-  const [noteText, setNoteText] = useState("");
+
   const [followUp, setFollowUp] = useState(null);
   const navigation = useNavigation();
+
+  const [noteText, setNoteText] = useState("");
+
+    //Multilingual
+  const {t} = useTranslation();
+
   const handleInputChange = (inputText) => {
     setNoteText(inputText);
   };
@@ -90,7 +98,7 @@ const FollowUpScreen = () => {
             </Surface>
         <Surface mode='elevated' elevation={4} style={styles.healthCard}>
                 <View style={styles.healthCardHeading}>
-                    <Text variant="titleMedium" >Instructions</Text>
+                    <Text variant="titleMedium" >{t('Instructions')}</Text>
                 </View>
                 <View style={styles.healthCardContent}>
                     <Text variant="bodyMedium" >
@@ -122,7 +130,7 @@ const FollowUpScreen = () => {
               cursorColor="black"
             />
              <Button style={{margin : 20 , backgroundColor:"#bcd9f0" ,}} icon="plus"  mode="elevated" onPress={() => addFollowUpInstruction()}>
-                <Text style={{color : "black"}}>Add Note </Text>
+                <Text style={{color : "black"}}>{t('Note')} </Text>
           </Button>
           </Card.Content>
          

@@ -5,9 +5,13 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 import { Button, Card, Icon, Surface, Text } from 'react-native-paper';
 import { fetchDoctorsFromDb } from '../common/Database';
 import { Askeys, getFromAsyncStorage } from "../utils/AsyncStorageService";
+import { useTranslation } from "react-i18next";
 
 const HealthCard2 = () => {
   const navigation = useNavigation();
+
+    //Multilingual
+    const {t} = useTranslation();
 
   const [user,setUser] = useState({
     name:'',
@@ -80,7 +84,7 @@ const HealthCard2 = () => {
       {/* <Text style={styles.title}>Health Score</Text> */}
       
       <CircularProgress
-       title='Health Score'
+       title={t('Health-Score')}
        maxValue={scoreObj.maxScore}
        titleFontSize={16}
         value={scoreObj.score}
@@ -97,7 +101,7 @@ const HealthCard2 = () => {
             width: 4,
           }}
         />
-         <Text >*Calculated from Questionnaries</Text>
+         <Text >*{title('Calculated-from-Questionnarie')}</Text>
       </Surface>
       <Surface mode='flat' style={styles.details}>
         {/* <Chip mode="flat" style={styles.namecard}avatar={<Avatar.Icon  icon="account" size={30}/>}><Text>Himmatwala Das</Text></Chip>  */}
@@ -105,8 +109,8 @@ const HealthCard2 = () => {
         <Card style={{paddingTop:20,marginTop:20,gap:30,height:200,width:'80%',alignSelf:'center',flexDirection:'column',alignItems:'center',backgroundColor:'#f5f5f5'}}>
           <Text style={{alignSelf:'center',marginBottom:30,fontWeight:'bold'}}>Surat</Text>
           <Surface mode='elevated' style={{width:'100%',height:80,alignSelf:'center',alignItems:'center',padding:20,backgroundColor:'#bcd9f0',borderRadius:20}}>
-            <Text>To see the Available Doctors</Text>
-            <Text>Click on Continue!</Text>
+            <Text>{t('To-see-the-Available-Doctors')}</Text>
+            <Text>{t('Click-on-Continue')}</Text>
           </Surface>
           </Card>
           <Button
@@ -114,7 +118,7 @@ const HealthCard2 = () => {
         style={styles.button}
         onPress={handleContinue}
       >
-        <Text style={styles.buttonText}>Continue</Text>
+        <Text style={styles.buttonText}>{t('Continue')}</Text>
       </Button>
 
         {/* <View style={styles.detailsItem}>

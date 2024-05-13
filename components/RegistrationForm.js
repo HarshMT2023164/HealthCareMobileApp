@@ -175,7 +175,7 @@ const RegistrationForm = () => {
     <View style={styles.container}>
       <View>
         <TextInput
-          label="Name"
+          label={t('Name')}
           value={form.name}
           onChangeText={(value) => handleInputChange("name", value)}
           mode="outlined"
@@ -188,7 +188,7 @@ const RegistrationForm = () => {
         </HelperText>
       </View>
       <TextInput
-        label="Age"
+        label={t('Age')}
         value={form.age}
         onChangeText={(value) => handleInputChange("age", value)}
         keyboardType="numeric"
@@ -206,7 +206,7 @@ const RegistrationForm = () => {
         onDismiss={closeMenu}
         anchor={
           <TextInput
-            label="Gender"
+            label={t('Gender')}
             value={form.gender}
             mode="outlined"
             style={styles.input}
@@ -217,15 +217,15 @@ const RegistrationForm = () => {
       >
         <Menu.Item
           onPress={() => handleInputChange("gender", "male")}
-          title="Male"
+          title={t('Male')}
         />
         <Menu.Item
           onPress={() => handleInputChange("gender", "female")}
-          title="Female"
+          title={t('Female')}
         />
         <Menu.Item
           onPress={() => handleInputChange("gender", "other")}
-          title="Other"
+          title={t('Others')}
         />
       </Menu>
       <HelperText type="error" visible={errorFields.gender}>
@@ -234,7 +234,7 @@ const RegistrationForm = () => {
 
       {/* Additional inputs with error handling */}
       <TextInput
-        label="Address"
+        label={t('Address')}
         value={form.address}
         onChangeText={(value) => handleInputChange("address", value)}
         mode="outlined"
@@ -246,7 +246,7 @@ const RegistrationForm = () => {
       </HelperText>
 
       <TextInput
-        label="Pincode"
+        label={t('Pincode')}
         value={form.pincode}
         onChangeText={(value) => handleInputChange("pincode", value)}
         keyboardType="numeric"
@@ -259,7 +259,7 @@ const RegistrationForm = () => {
       </HelperText>
 
       <TextInput
-        label="State"
+        label={t('State')}
         value={form.state}
         onChangeText={(value) => handleInputChange("state", value)}
         mode="outlined"
@@ -271,7 +271,7 @@ const RegistrationForm = () => {
       </HelperText>
 
       <TextInput
-        label="District"
+        label={t('District')}
         value={form.district}
         onChangeText={(value) => handleInputChange("district", value)}
         mode="outlined"
@@ -283,7 +283,7 @@ const RegistrationForm = () => {
       </HelperText>
 
       <TextInput
-        label="Abha ID"
+        label={t('Abha-ID')}
         value={form.abhaId}
         onChangeText={(value) => handleInputChange("abhaId", value)}
         mode="outlined"
@@ -299,7 +299,7 @@ const RegistrationForm = () => {
           onPress={handleFormSubmit}
           style={styles.button}
         >
-          Submit
+          {t('Submit')}
         </Button>
         
         <Button
@@ -307,7 +307,7 @@ const RegistrationForm = () => {
           onPress={() => clearForm()}
           style={styles.button}
         >
-          <Text>Clear Form</Text>
+          <Text>{t('Clear')}</Text>
         </Button>
         
       </View>

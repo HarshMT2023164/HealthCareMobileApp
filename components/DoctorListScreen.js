@@ -5,6 +5,7 @@ import { Avatar, Button, Surface, Text } from 'react-native-paper';
 import { fetchAllFormData, fetchAllHospitalsFromDb, fetchDoctorsFromDb, fetchResponsesFromDb, insertDoctorAssignmentToDb, insertHospitalAssignmentToDb } from '../common/Database';
 import { getFromAsyncStorage } from '../utils/AsyncStorageService';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 // const data =[
 //   {
@@ -39,6 +40,10 @@ import { useNavigation } from '@react-navigation/native';
 export default function DoctorListScreen() {
   const [hospitalList , setHospitalList] = useState([]);
   const navigation = useNavigation();
+
+  //Multilingual
+  const {t} = useTranslation();
+
   const fetchRegistrationData = async() => {
     try {
       const data = await fetchAllFormData();
@@ -120,7 +125,7 @@ export default function DoctorListScreen() {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.headingContainer}>
-          <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 16 }}>Available Hospitals</Text>
+          <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 16 }}>{t('Available-Doctors')}</Text>
         </View>
         {hospitalList.map((item, index) => (
           <Surface key={index} mode='elevated' elevation={4} style={styles.surfaceItem}>
@@ -136,7 +141,7 @@ export default function DoctorListScreen() {
               </View>
             </View>
             <View style={styles.surfaceItemButton}>
-              <Button onPress={() => assignHospital(item?.hospital?.uhid)} icon='chevron-right' mode='contained' contentStyle={{ flexDirection: 'row-reverse', backgroundColor: '#7b9dbd' }}>Assign</Button>
+              <Button onPress={() => assignDoctor(doctor?.username)} icon='chevron-right' mode='contained' contentStyle={{ flexDirection: 'row-reverse', backgroundColor: '#7b9dbd' }}>{t('Assign')}</Button>
             </View>
           </Surface>
         ))}

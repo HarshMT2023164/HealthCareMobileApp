@@ -44,7 +44,11 @@
     "react-native-svg-circular-progress": "^1.0.4",
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "~0.19.6",
-    "react-navigation-stack": "^2.10.4"
+    "react-navigation-stack": "^2.10.4",
+    "@lottiefiles/react-lottie-player": "^3.5.3",
+    "i18next": "^23.11.2",
+    "react-i18next": "^14.1.1"
+        
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

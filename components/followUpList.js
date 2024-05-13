@@ -40,12 +40,14 @@ export default function FollowUpListScreen() {
     navigation.push("MedReport");
   };
 
- 
+  const {t} = useTranslation();
+
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 16 }}>Follow Up List</Text>
+        <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 16 }}>{t('Follow-Up-List')}</Text>
       </View>
       {followUpList.map((followUp, index) => (
         <Surface onTouchStart={() => conductFollowUp(followUp)} key={index} mode='elevated' elevation={4} style={[styles.surfaceItem , {backgroundColor : followUp.status ? "#F2FFF0" : "#FFF0EF"}]}>

@@ -1,16 +1,21 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, StatusBar } from "react-native";
-import { Avatar, Button, Card, Icon, Surface, Text } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import { Avatar, Button, Icon, Surface, Text } from "react-native-paper";
 import { Askeys, getFromAsyncStorage } from "../utils/AsyncStorageService";
 import { DataTable } from "react-native-paper";
 import { ScrollView } from 'react-native';
-import { print } from "react-native-print";
+import React, { useState } from "react";
+import { View, StyleSheet,} from "react-native";
+import { Avatar, Button,Icon,Surface,Text} from "react-native-paper";
+
 
 const MedicalReport = () => {
   const [followUp, setFollowUp] = useState(null);
   const navigation = useNavigation();
 
+    //Multilingual
+    const {t} = useTranslation();
 
   const handleFollowUp = () => {
     navigation.navigate("FollowUpScreen");
@@ -59,7 +64,7 @@ const MedicalReport = () => {
         </Surface>
         <Surface mode="elevated" elevation={4} style={styles.healthCard}>
           <View style={styles.healthCardHeading}>
-            <Text variant="titleMedium">Diagnosis</Text>
+            <Text variant="titleMedium">{t('Diagnosis')}</Text>
           </View>
           <View style={styles.healthCardContent}>
             <Text>{followUp?.citizen?.healthRecordDTO?.diagnosis}</Text>
@@ -71,7 +76,7 @@ const MedicalReport = () => {
           followUp?.citizen?.healthRecordDTO?.prescriptions && (
             <Surface mode="elevated" elevation={4} style={styles.healthCard}>
               <View style={styles.healthCardHeading}>
-                <Text variant="titleMedium">Prescriptions</Text>
+                <Text variant="titleMedium">{t('Prescription')}</Text>
               </View>
               <ScrollView horizontal={true}>
               <View style={styles.healthCardContent}>
@@ -125,7 +130,7 @@ const MedicalReport = () => {
           onPress={handleFollowUp}
           contentStyle={{ flexDirection: "row-reverse" }}
         >
-          FollowUp
+          {t('Follow-Up')}
         </Button>
   
       </View>
@@ -133,6 +138,7 @@ const MedicalReport = () => {
     )
   );
 };
+      
 
 const styles = StyleSheet.create({
   container: {
