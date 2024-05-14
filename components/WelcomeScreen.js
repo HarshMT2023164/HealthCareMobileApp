@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, SafeAreaView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Button } from 'react-native-paper';
 
@@ -8,7 +9,7 @@ const WelcomeScreen = () => {
     const navigation = useNavigation();
     const windowHeight = useWindowDimensions().height;
     const windowWidth= useWindowDimensions().width;
-
+    const {t} = useTranslation();
     const handleLoginPress = () => {
         navigation.navigate('LoginScreen');
     };

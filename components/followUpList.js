@@ -4,6 +4,7 @@ import { Avatar, Button, Chip, Surface, Text } from 'react-native-paper';
 import { fetchFollowUpData } from '../common/Database';
 import { Askeys, storeInAsyncStorage } from '../utils/AsyncStorageService';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 export default function FollowUpListScreen() {
   const [followUpList, setFollowUpList] = useState([]);
@@ -116,4 +117,5 @@ const styles = StyleSheet.create({
     width : "40%",
     padding : "auto"
   },
+  
 });

@@ -125,7 +125,7 @@ export default function DoctorListScreen() {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.headingContainer}>
-          <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 16 }}>{t('Available-Doctors')}</Text>
+          <Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 16 }}>Hospitals</Text>
         </View>
         {hospitalList.map((item, index) => (
           <Surface key={index} mode='elevated' elevation={4} style={styles.surfaceItem}>
@@ -141,7 +141,7 @@ export default function DoctorListScreen() {
               </View>
             </View>
             <View style={styles.surfaceItemButton}>
-              <Button onPress={() => assignDoctor(doctor?.username)} icon='chevron-right' mode='contained' contentStyle={{ flexDirection: 'row-reverse', backgroundColor: '#7b9dbd' }}>{t('Assign')}</Button>
+              <Button onPress={() => assignHospital(item?.hospital?.uhid)} icon='chevron-right' mode='contained' contentStyle={{ flexDirection: 'row-reverse', backgroundColor: '#7b9dbd' }}>{t('Assign')}</Button>
             </View>
           </Surface>
         ))}

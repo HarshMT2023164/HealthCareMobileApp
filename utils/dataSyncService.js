@@ -21,6 +21,8 @@ import {
 import { TableNames } from "../common/Constants/DBConstants";
 import { Askeys, getFromAsyncStorage } from "./AsyncStorageService";
 
+let isSyncing = false; 
+
 const syncRegisterData = async () => {
 
 
@@ -65,7 +67,8 @@ const syncRegisterData = async () => {
         BASE_URL + Register_Patient,
         objWithListOfPatient,{
           headers : {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
           }
         }
       );
@@ -119,7 +122,8 @@ const syncResponseData = async () => {
         objWithListOfResponses,
         {
           headers : {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
           }
         }
       );
@@ -165,6 +169,7 @@ const syncHospitalAssignData = async () => {
         {
           headers : {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
             
           }
         }
@@ -196,9 +201,9 @@ const syncFollowUpInstructionData = async () => {
 
     if (followUpData.length > 0) {
       // Make API call to sync data with backend
-
+      let reqBody = followUpData.map((item) => ({followUpId : item.followUpId,measureOfVitals : item.instructions}) )
       const objWithListOfFollowUpInstructions = {
-        followUpInstructionsRequests: followUpData,
+        followUpInstructionsRequests: reqBody,
       };
 
       console.log(objWithListOfFollowUpInstructions);
@@ -209,7 +214,8 @@ const syncFollowUpInstructionData = async () => {
         objWithListOfFollowUpInstructions,
         {
           headers : {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
           }
         }
       );
@@ -232,25 +238,28 @@ const syncFollowUpInstructionData = async () => {
 
 const syncDataWithBackend = async () => {
   try {
-   
+    
       const isConnected = await NetInfo.fetch().then(
         (state) => state.isConnected
       );
 
-      if (isConnected) {
+      if (isConnected && !isSyncing) {
+        isSyncing = true;
+        console.log("called");
         // Make API call to sync data with backend
-        // deleteAllTableFromSync();
+        //  deleteAllTableFromSync();
         await syncRegisterData();
         await syncResponseData();
         await syncHospitalAssignData();
         await syncFollowUpInstructionData();
-
+        isSyncing = false;
       } else {
         console.log(
-          "Device is offline. Data will be synced automatically when online."
+          "Device is offline or synchronization is already in progress."
         );
       } 
   } catch (error) {
+    isSyncing = false;
     console.error("Error syncing form data with backend:", error);
   }
 };
@@ -258,8 +267,8 @@ const syncDataWithBackend = async () => {
 export const deleteAllTableFromSync = async () => {
   await deleteAllFormData();
   await deleteAllDataFromTable(TableNames.RegisterResponses);
-  await deleteAllDataFromTable(TableNames.DoctorAssignment);
-
+  await deleteAllDataFromTable(TableNames.HospitalAssignments);
+  await deleteAllDataFromTable(TableNames.FollowUpInstructions)
 }
 
 export { syncDataWithBackend };

@@ -1,13 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
-import { Avatar, Button, Icon, Surface, Text } from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Avatar, Button, DataTable, Icon, Surface, Text } from "react-native-paper";
 import { Askeys, getFromAsyncStorage } from "../utils/AsyncStorageService";
-import { DataTable } from "react-native-paper";
-import { ScrollView } from 'react-native';
-import React, { useState } from "react";
-import { View, StyleSheet,} from "react-native";
-import { Avatar, Button,Icon,Surface,Text} from "react-native-paper";
+import { useTranslation } from "react-i18next";
+
 
 
 const MedicalReport = () => {

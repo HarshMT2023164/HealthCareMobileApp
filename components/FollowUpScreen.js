@@ -33,9 +33,15 @@ const FollowUpScreen = () => {
 
     await insertFollowUpInstructionData({followUpId : followUp.id , instructions : noteText});
 
-    await storeInAsyncStorage(Askeys.ABHAID);
+    await storeInAsyncStorage(Askeys.ABHAID, followUp?.citizen?.abhaId);
 
-    navigation.push("question");
+    if(followUp?.isLastFollowUp){
+      navigation.push("question");
+    }
+    else{
+      navigation.push("TabNavigation");
+    }
+   
     
     
   }
@@ -55,7 +61,8 @@ const FollowUpScreen = () => {
           BASE_URL + ADD_FOLLOUP_INSTRUCTIONS,
           objWithListOfFollowUps,{
             headers : {
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
+              "ngrok-skip-browser-warning": "true"
             }
           }
         );

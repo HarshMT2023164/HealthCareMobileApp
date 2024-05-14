@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import {
   Button,
+  Checkbox,
   HelperText,
   Menu,
   TextInput,
@@ -11,12 +12,14 @@ import {
 import { insertFormData } from "../common/Database";
 import { syncDataWithBackend } from "../utils/dataSyncService";
 import { Askeys, storeInAsyncStorage } from "../utils/AsyncStorageService";
+import { useTranslation } from "react-i18next";
 
 
 
 const RegistrationForm = () => {
   const navigation = useNavigation();
   const theme = useTheme();
+  const {t} = useTranslation();
 
   const [form, setForm] = useState({
     name: "",
@@ -43,6 +46,12 @@ const RegistrationForm = () => {
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
+
+  const [consentChecked, setConsentChecked] = useState(false);
+
+  const handleConsentCheckbox = () => {
+    setConsentChecked(!consentChecked);
+  };
 
   const handleInputChange = (key, value) => {
     setForm({
@@ -79,6 +88,7 @@ const RegistrationForm = () => {
   };
 
   const handleFormSubmit = async() => {
+
     const requiredFields = [
       "name",
       "age",
@@ -136,7 +146,7 @@ const RegistrationForm = () => {
     insertFormData(form).then(() => {
       storeInAsyncStorage("abhaId", form.abhaId);
       storeInAsyncStorage(Askeys.REGISTER_USER, {name : form.name , gender : form.gender , age : form.age});
-      
+     
       console.log("Register data submitted successfully");
     })
     .catch(() => {
@@ -146,16 +156,17 @@ const RegistrationForm = () => {
     console.log(form);
 
     // Clear form fields and error states after successful submission
-    // setForm({
-    //   name: '',
-    //   age: '',
-    //   gender: '',
-    //   address: '',
-    //   pincode: '',
-    //   state: '',
-    //   district: '',
-    //   abhaId: ''
-    // });
+    setForm({
+      name: '',
+      age: '',
+      gender: '',
+      address: '',
+      pincode: '',
+      state: '',
+      district: '',
+      abhaId: ''
+    });
+    
     setErrorFields({
       name: false,
       age: false,
@@ -167,7 +178,14 @@ const RegistrationForm = () => {
       abhaId: false,
     });
 
-    navigation.push("question");
+    if(consentChecked){
+      navigation.push("question");
+    }
+    else{
+      navigation.push("TabNavigation");
+    }
+
+    
     
   };
 
@@ -293,6 +311,16 @@ const RegistrationForm = () => {
       <HelperText type="error" visible={errorFields.abhaId}>
         Please enter your Abha ID
       </HelperText>
+
+      <View style={styles.consentContainer}>
+          <Checkbox.Android
+            status={consentChecked ? 'checked' : 'unchecked'}
+            onPress={handleConsentCheckbox}
+            color={theme.colors.primary}
+          />
+          <Text style={styles.consentText}>Do citizen provide consent to conduct his/her survey?</Text>
+        </View>
+
       <View style={styles.btnCont}>
         <Button
           mode="contained"
@@ -332,6 +360,15 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between"
+  },
+  consentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+    // marginLeft: 10,
+  },
+  consentText: {
+    // marginLeft: 10,
   },
 });
 

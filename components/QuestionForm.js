@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { Button, Card, RadioButton, Text } from "react-native-paper";
 import { deleteAllDataFromTable, fetchDoctorAssignmentsFromDb, fetchDoctorsFromDb, fetchQuestionnaireFromDb, fetchResponsesFromDb, insertDoctorToDb, insertResponse, insertResponseToDb } from "../common/Database";
@@ -7,6 +7,8 @@ import { deleteAllDataFromTable, fetchDoctorAssignmentsFromDb, fetchDoctorsFromD
 import { TableNames } from '../common/Constants/DBConstants';
 import { Askeys, getFromAsyncStorage, storeInAsyncStorage } from '../utils/AsyncStorageService';
 import { useTranslation } from 'react-i18next';
+import LanguageContext from '../utils/Context/LanguageContext';
+import { LANGUAGE } from '../common/Constants/LanguageConstants';
 const QuestionForm = () => {
   const [answers, setAnswers] = useState({});
   const [answerIds, setAnswerIds] = useState({});
@@ -16,7 +18,7 @@ const QuestionForm = () => {
 
   //Multilingual
   const {t} = useTranslation();
- 
+  const {language} = useContext(LanguageContext);
   const data = {
     "id": 2,
     "name": "Mental Health Condition Assessment",
@@ -188,11 +190,21 @@ const QuestionForm = () => {
   const fetchQuestionnaire = async () => {
     try {
       const data = await fetchQuestionnaireFromDb();
-      console.log("Fetched Assessment Data:", (data[0]?.questions));
+      console.log("Fetched Questionnaire Data:", data);
+      let id=1;
+      if(language === LANGUAGE.GUJARATI){
+        id=3;
+      }
+      else if(language === LANGUAGE.HINDI){
+        id=2;
+      }
+      else{
+        id=1;
+      }
   
-      if (data && data.length > 0 && Array.isArray(data[0]?.questions)) {
-        console.log("before setting data  :" , data[0].questions);
-        setQuestionList(data[0]?.questions);
+      if (data && data.length > 0 && Array.isArray(data[id]?.questions)) {
+        console.log("before setting data  :" , data[id].questions);
+        setQuestionList(data[id]?.questions);
         
       } else {
         console.warn('Question data format is invalid or empty');
@@ -316,7 +328,7 @@ const QuestionForm = () => {
   } 
 
   useEffect(() => {
-  
+    console.log(language);
     // fetchQuestionnaireFromAsync();
     fetchQuestionnaire();
     // fetchResponses();
@@ -472,15 +484,7 @@ const QuestionForm = () => {
           {t('Submit')}
         </Button>
       </View>
-      <View>
-        <Button
-          mode="contained"
-          style={styles.submitButton}
-          onPress={handleSubmitToDb}
-        >
-          SubmitToDb
-        </Button>
-      </View>
+   
     </View>
   );
 };

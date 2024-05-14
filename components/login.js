@@ -53,7 +53,11 @@ const Login = () => {
     //Dynamic
     try {
       console.log("called");
-      const res = await axios.post(BASE_URL + LOGIN, user);
+      const res = await axios.post(BASE_URL + LOGIN, user,{
+        headers : {
+          "ngrok-skip-browser-warning": "true"
+        }
+      });
       
       // Check if the response status is in the success range (200-299)
       if (res.status >= 200 && res.status < 300) {

@@ -45,6 +45,10 @@ const HealthCard2 = () => {
   
   },[])
 
+  const onHomePageClick = () => {
+    navigation.navigate('TabNavigation');
+  }
+
   
   const handleContinue = ()=>{
     navigation.navigate('doctorList');
@@ -101,16 +105,22 @@ const HealthCard2 = () => {
             width: 4,
           }}
         />
-         <Text >*{title('Calculated-from-Questionnarie')}</Text>
+         <Text >*{t('Calculated-from-Questionnaire')}</Text>
+         <Text style ={{borderBottomWidth : 1, }}>Range : </Text>
+         <Text>0-12 : Normal</Text>
+         <Text>12-20 : moderate</Text>
+         <Text>20-30 : severe</Text>
+         
       </Surface>
       <Surface mode='flat' style={styles.details}>
         {/* <Chip mode="flat" style={styles.namecard}avatar={<Avatar.Icon  icon="account" size={30}/>}><Text>Himmatwala Das</Text></Chip>  */}
         {/* <Card style={{height:50,width:200,alignSelf:'center',flexDirection:'row',justifyContent:'center',alignItems:'center'}}><Text>Results</Text></Card> */}
         <Card style={{paddingTop:20,marginTop:20,gap:30,height:200,width:'80%',alignSelf:'center',flexDirection:'column',alignItems:'center',backgroundColor:'#f5f5f5'}}>
           <Text style={{alignSelf:'center',marginBottom:30,fontWeight:'bold'}}>Surat</Text>
-          <Surface mode='elevated' style={{width:'100%',height:80,alignSelf:'center',alignItems:'center',padding:20,backgroundColor:'#bcd9f0',borderRadius:20}}>
-            <Text>{t('To-see-the-Available-Doctors')}</Text>
-            <Text>{t('Click-on-Continue')}</Text>
+          <Surface onTouchStart={() => onHomePageClick()} mode='elevated' style={{ width:'100%',height:60,alignSelf:'center',alignItems:'center',padding:20,backgroundColor:'#bcd9f0',borderRadius:20}}>
+            <Text style={{fontWeight:'bold'}}>End Survey</Text>
+          
+           
           </Surface>
           </Card>
           <Button
@@ -135,7 +145,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-   
+    // marginTop: 10,
     flexDirection:'column',
    
   },
@@ -172,11 +182,11 @@ const styles = StyleSheet.create({
   scoreCardSurface: {
 
     alignItems:'center',
-    height: '50%',
+    height: '53%',
     width: '100%',
     flexDirection:'column',
     justifyContent:'center',
-    gap:37,
+    gap:5,
     backgroundColor: '#bcd9f0',
     alignSelf: 'center',
     borderBottomLeftRadius: 80,

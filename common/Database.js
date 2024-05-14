@@ -5,7 +5,7 @@
 
   export const getDatabaseInstance = () => {
     if (!databaseInstance) {
-      databaseInstance = SQLite.openDatabase('FhwApp10.db');
+      databaseInstance = SQLite.openDatabase('FhwApp11.db');
       setupDatabase(); // Initialize tables if the instance is newly created
     }
     return databaseInstance;

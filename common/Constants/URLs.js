@@ -1,4 +1,4 @@
-export const BASE_URL = "http://192.168.136.137:8080";
+export const BASE_URL = "https://diverse-skylark-happily.ngrok-free.app";
 
 export const LOGIN = "/auth/signin";
 
@@ -19,3 +19,5 @@ export const ADD_FOLLOWUP_INSTRUCTIONS = "/FieldHealthCareWorker/addFollowUpInst
 export const FETCH_HOSPITALS = "/FieldHealthCareWorker/getHospitals";
 
 export const ASSIGN_HOSPITAL = "/FieldHealthCareWorker/assignHospitalsToCitizens";
+
+export const FETCH_ALL_QUESTIONNAIRE= "/blackBox/getQuestionnaires"

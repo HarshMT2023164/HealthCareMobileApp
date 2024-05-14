@@ -12,7 +12,7 @@ import HealthCard2 from './components/HealthCard2';
 import Questionnaire from './components/Questionnaire';
 import Registration from './components/Registration';
 import TabNavigation from './components/TabNavigation';
-
+import NetInfo from "@react-native-community/netinfo";
 
 import WelcomeScreen from './components/WelcomeScreen';
 
@@ -25,6 +25,8 @@ import FollowUpScreen from './components/FollowUpScreen';
 import { LanguageProvider } from './utils/Context/LanguageContext';
 import { I18nextProvider } from 'react-i18next';
 import i18next from 'i18next';
+import { syncDataWithBackend } from './utils/dataSyncService';
+import { Text } from 'react-native';
 
 export default function App() {
 
@@ -35,6 +37,7 @@ export default function App() {
         const response = await axios.get(`${BASE_URL+FETCH_DOCTORLIST}?username=${"FHW41545"}`, {
           headers: {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
           },
         });
         console.log(response.data);
@@ -79,6 +82,7 @@ export default function App() {
         const response = await axios.get(`${BASE_URL+FETCH_QUESTIONNAIRE}?id=${2}`, {
           headers: {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
           },
         });
         console.log(response.data);
@@ -115,27 +119,27 @@ export default function App() {
     fetchQuestionnaire();
   } 
 
-  const [isConnected , setIsConnected]  = useState("Not connected");
+  const [isConnected , setIsConnected]  = useState(false);
 
-  // useEffect(() => {
-  //   const unsubscribeNetInfo = NetInfo.addEventListener(state => {
-  //     if (state.isConnected) {
-  //       // Network connection is available, trigger data sync
-  //       console.log("isconnected");
-  //       syncDataWithBackend();
-  //       setIsConnected("it is connected") // Call your sync function here
-  //     }
-  //     else{
-  //       console.log("is not connected");
-  //       setIsConnected("disconnected");
-  //     }
-  //   });
+  useEffect(() => {
+    const unsubscribeNetInfo = NetInfo.addEventListener(state => {
+      if (state.isConnected) {
+        // Network connection is available, trigger data sync
+        console.log("isconnected");
+        syncDataWithBackend();
+        setIsConnected(true) // Call your sync function here
+      }
+      else{
+        console.log("is not connected");
+        setIsConnected(false);
+      }
+    });
 
-  //   return () => {
-  //     // Unsubscribe from network state changes when component unmounts
-  //     unsubscribeNetInfo();
-  //   };
-  // },[]);
+    return () => {
+      // Unsubscribe from network state changes when component unmounts
+      unsubscribeNetInfo();
+    };
+  },[]);
 
   useEffect(() => {
     console.log("hello");
@@ -159,9 +163,10 @@ export default function App() {
     <LanguageProvider>
       <I18nextProvider i18n={i18next}>
         <PaperProvider>
+
           <View style={styles.container}>
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="TabNavigation">
+            <Stack.Navigator initialRouteName="ZENCARE">
             <Stack.Screen
               name='ZENCARE'
               component={WelcomeScreen}
@@ -181,6 +186,16 @@ export default function App() {
             </Stack.Navigator>
           </NavigationContainer>
           </View>
+          {isConnected ? (
+            <View style={styles.isConnectedContOnline}>
+              <Text style={{display:"flex", justifyContent:"center", textAlign:"center"}}> Online</Text>
+            </View>
+          ) : (
+            <View style={styles.isConnectedContOffline}>
+              <Text style={{display:"flex", justifyContent:"center", textAlign:"center", color:"#FFFFFF"}}> Offline</Text>
+            </View>
+          )}
+          
         </PaperProvider>
         </I18nextProvider>
         </LanguageProvider>
@@ -210,6 +225,18 @@ const styles = StyleSheet.create(
     container:
     {
       flex:1,
+      marginTop: 10
+    },
+    
+    isConnectedContOnline: {
+      backgroundColor: "#90EE90",
+      padding:5,
+      // display : "flex",
+      // justifyContent: "center"
+    },
+    isConnectedContOffline : {
+      backgroundColor: "#fd5c63",
+      padding:5,
     }
   }
 )

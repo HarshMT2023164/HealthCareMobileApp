@@ -1,25 +1,22 @@
-import React, { useState, useEffect, useContext } from "react";
-import { View, StyleSheet, Image, ScrollView } from "react-native";
-import { TouchableOpacity, Animated } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { Animated, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import {
-  Appbar,
-  Text,
-  Surface,
-  Card,
-  Button,
-  TextInput,
-  Icon,
-} from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign } from "@expo/vector-icons";
-import { syncDataWithBackend } from "../utils/dataSyncService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Askeys, getFromAsyncStorage } from "../utils/AsyncStorageService";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
+import {
+  Appbar,
+  Button,
+  Card,
+  Icon,
+  Surface,
+  Text
+} from "react-native-paper";
+import { TableNames } from "../common/Constants/DBConstants";
 import {
   BASE_URL,
+  FETCH_ALL_QUESTIONNAIRE,
   FETCH_DOCTORLIST,
   FETCH_FOLLOW_UP_LIST,
   FETCH_HOSPITALS,
@@ -32,10 +29,9 @@ import {
   insertHospitalData,
   insertQuestionnaireData,
 } from "../common/Database";
-import { TableNames } from "../common/Constants/DBConstants";
+import { Askeys, getFromAsyncStorage } from "../utils/AsyncStorageService";
 import LanguageContext from "../utils/Context/LanguageContext";
-import { useTranslation } from "react-i18next";
-import { changeLanguage } from "i18next";
+import { syncDataWithBackend } from "../utils/dataSyncService";
 
 const Home = () => {
   const [selectedValue, setSelectedValue] = useState("option2");
@@ -56,6 +52,7 @@ const Home = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
           },
         }
       );
@@ -100,10 +97,11 @@ const Home = () => {
       const token = await getFromAsyncStorage(Askeys.TOKEN);
       console.log(token);
       const response = await axios.get(
-        `${BASE_URL + FETCH_QUESTIONNAIRE}?id=${2}`,
+        `${BASE_URL + FETCH_ALL_QUESTIONNAIRE}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
           },
         }
       );
@@ -116,17 +114,18 @@ const Home = () => {
           } else {
             console.log("No form data found to delete");
           }
-          insertQuestionnaireData(response.data)
+          response?.data.forEach((questionnaire) => {insertQuestionnaireData(questionnaire)
             .then(() => {
               console.log(`Questionnaire data  inserted successfully`);
               // Additional logic after successful insertion (if needed)
             })
             .catch((error) => {
-              console.error(`Error inserting doctor '${doctor.name}':`, error);
+              console.error(`Error inserting questionnaire data : `, error);
             });
+          })
         })
         .catch((error) => {
-          console.error("Error deleting form data:", error);
+          console.error("Error deleting Questionnaire data:", error);
         });
     } catch (error) {
       console.log(error);
@@ -145,6 +144,7 @@ const Home = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
           },
         }
       );
@@ -193,6 +193,7 @@ const Home = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
           },
         }
       );
