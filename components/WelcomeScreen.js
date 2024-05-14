@@ -34,7 +34,7 @@ const WelcomeScreen = () => {
                         style={styles.loginButton}
                         labelStyle={styles.buttonText}
                     >
-                       {t('Welcome')}
+                       Welcome
                     </Button>
                 </View>
             </View>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { Card, Icon, IconButton, Surface, Text } from 'react-native-paper';
+import { Button, Card, Icon, IconButton, Surface, Text } from 'react-native-paper';
 
 
 const Profile = () => (
@@ -44,11 +44,14 @@ const Profile = () => (
           <View><Icon source='calendar'size={24} color='black'/></View>
           <View><Text style={{fontWeight:'bold',fontSize:16,}}>23 years</Text></View>
           </View>
-          <View style={styles.namecard}>
+          {/* <View style={styles.namecard}>
           <View><Icon source='gender-male'size={24} color='black'/></View>
           <View><Text style={{fontWeight:'bold',fontSize:16,}}>male</Text></View>
-          </View>
+          </View> */}
       </Surface>
+          <View>
+            <Button icon="logout" style={styles.logout}><Text style={{color:'black'}}>Logout</Text></Button>
+          </View>
       
     </View>
   );
@@ -95,10 +98,10 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     }, 
    Profiledetails: {
-      marginTop:45,
+      marginTop:40,
       // marginRight:30,
       alignItems:'center',
-      height: '58%',
+      height: '50%',
       width: '90%',
       flexDirection:'column',
       justifyContent:'center',
@@ -129,6 +132,12 @@ const styles = StyleSheet.create({
       // borderBottomRightRadius:80,
       elevation:10
     },
+    logout:{
+      backgroundColor:'white',
+      width:'30%',
+      marginTop:10,
+      alignSelf:'center',
+    }
    
   });
 
